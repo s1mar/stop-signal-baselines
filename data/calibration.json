@@ -1,0 +1,17 @@
+{
+ "model": "openai/gpt-5.6-terra",
+ "n": 282,
+ "ref_stuck_rate": 0.45390070921985815,
+ "agreement": {
+  "north-mini": {
+   "agreement": 0.6595744680851063,
+   "kappa": 0.27707754753257846,
+   "local_stuck_rate": 0.18439716312056736
+  },
+  "laguna": {
+   "agreement": 0.74822695035461,
+   "kappa": 0.47872949752668575,
+   "local_stuck_rate": 0.31560283687943264
+  }
+ }
+}

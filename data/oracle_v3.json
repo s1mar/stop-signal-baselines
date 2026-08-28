@@ -1,0 +1,11 @@
+{
+ "n": 121,
+ "non_monotone_frac": 0.049586776859504134,
+ "median_max_drop": 0.058823529411764705,
+ "frac_ending_below_peak": 0.04132231404958678,
+ "ppr_v2": 0.5703962123099925,
+ "ppr_v3": 0.2616496386743085,
+ "tstar_delta_median": 5.0,
+ "tstar_agree_within_2": 0.33884297520661155,
+ "tstar_v3_earlier_frac": 0.03305785123966942
+}

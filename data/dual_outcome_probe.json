@@ -1,0 +1,1402 @@
+{
+ "scanned": 40000,
+ "kept": 23294,
+ "min_steps": 15,
+ "n_instances": 1790,
+ "n_dual_outcome": 348,
+ "n_within_pairs": 35083,
+ "dual_outcome_instances": {
+  "Melevir__cognitive_complexity-15": {
+   "failed": 16,
+   "resolved": 16
+  },
+  "bihealth__biomedsheets-23": {
+   "failed": 8,
+   "resolved": 4
+  },
+  "geopandas__geopandas-3240": {
+   "failed": 3,
+   "resolved": 2
+  },
+  "iterative__dvc-5785": {
+   "failed": 28,
+   "resolved": 6
+  },
+  "just-work__fffw-100": {
+   "failed": 15,
+   "resolved": 3
+  },
+  "networkx__networkx-7024": {
+   "failed": 14,
+   "resolved": 4
+  },
+  "ppizarror__pygame-menu-357": {
+   "failed": 54,
+   "resolved": 25
+  },
+  "python-visualization__folium-1633": {
+   "failed": 9,
+   "resolved": 8
+  },
+  "scikit-hep__cabinetry-396": {
+   "failed": 11,
+   "resolved": 1
+  },
+  "serge-sans-paille__gast-59": {
+   "failed": 44,
+   "resolved": 1
+  },
+  "andialbrecht__sqlparse-445": {
+   "failed": 61,
+   "resolved": 1
+  },
+  "astarte-platform__astarte-device-sdk-python-98": {
+   "failed": 6,
+   "resolved": 19
+  },
+  "auth0__auth0-python-500": {
+   "failed": 2,
+   "resolved": 8
+  },
+  "eEcoLiDAR__laserchicken-135": {
+   "failed": 2,
+   "resolved": 2
+  },
+  "facelessuser__pymdown-extensions-2039": {
+   "failed": 25,
+   "resolved": 1
+  },
+  "fair-workflows__nanopub-140": {
+   "failed": 14,
+   "resolved": 5
+  },
+  "fatiando__pooch-171": {
+   "failed": 17,
+   "resolved": 1
+  },
+  "gibsramen__evident-23": {
+   "failed": 2,
+   "resolved": 2
+  },
+  "googleapis__python-api-core-546": {
+   "failed": 9,
+   "resolved": 13
+  },
+  "joke2k__faker-828": {
+   "failed": 18,
+   "resolved": 13
+  },
+  "konradhalas__dacite-216": {
+   "failed": 11,
+   "resolved": 9
+  },
+  "package-url__packageurl-python-29": {
+   "failed": 12,
+   "resolved": 31
+  },
+  "pydantic__pydantic-2167": {
+   "failed": 30,
+   "resolved": 2
+  },
+  "tempoCollaboration__OQuPy-74": {
+   "failed": 4,
+   "resolved": 2
+  },
+  "adamchainz__ec2-metadata-350": {
+   "failed": 9,
+   "resolved": 4
+  },
+  "adbar__simplemma-114": {
+   "failed": 10,
+   "resolved": 2
+  },
+  "geomet__geomet-101": {
+   "failed": 22,
+   "resolved": 23
+  },
+  "keras-team__keras-nlp-131": {
+   "failed": 35,
+   "resolved": 1
+  },
+  "microsoft__electionguard-python-83": {
+   "failed": 2,
+   "resolved": 4
+  },
+  "oasis-open__cti-python-stix2-454": {
+   "failed": 13,
+   "resolved": 3
+  },
+  "pydantic__pydantic-3975": {
+   "failed": 23,
+   "resolved": 8
+  },
+  "python-control__python-control-834": {
+   "failed": 2,
+   "resolved": 1
+  },
+  "wireservice__csvkit-800": {
+   "failed": 22,
+   "resolved": 4
+  },
+  "cunybpl__isdparser-4": {
+   "failed": 9,
+   "resolved": 1
+  },
+  "docker__docker-py-1167": {
+   "failed": 8,
+   "resolved": 20
+  },
+  "geopandas__geopandas-1336": {
+   "failed": 19,
+   "resolved": 12
+  },
+  "hynek__argon2-cffi-174": {
+   "failed": 4,
+   "resolved": 3
+  },
+  "iamjackg__md2cf-97": {
+   "failed": 22,
+   "resolved": 5
+  },
+  "ithaka__apiron-8": {
+   "failed": 10,
+   "resolved": 10
+  },
+  "joke2k__django-environ-325": {
+   "failed": 1,
+   "resolved": 3
+  },
+  "lucidsushi__gs_pip_install-132": {
+   "failed": 5,
+   "resolved": 9
+  },
+  "marshmallow-code__apispec-811": {
+   "failed": 2,
+   "resolved": 8
+  },
+  "pappasam__toml-sort-36": {
+   "failed": 1,
+   "resolved": 2
+  },
+  "reata__sqllineage-38": {
+   "failed": 30,
+   "resolved": 3
+  },
+  "scrapy__scrapy-2847": {
+   "failed": 14,
+   "resolved": 2
+  },
+  "simonsobs__ocs-332": {
+   "failed": 9,
+   "resolved": 4
+  },
+  "Azure__msrest-for-python-208": {
+   "failed": 12,
+   "resolved": 6
+  },
+  "UC-Davis-molecular-computing__scadnano-python-package-288": {
+   "failed": 15,
+   "resolved": 3
+  },
+  "ameily__cincoconfig-26": {
+   "failed": 11,
+   "resolved": 20
+  },
+  "asottile__yesqa-44": {
+   "failed": 5,
+   "resolved": 1
+  },
+  "benmoran56__esper-81": {
+   "failed": 24,
+   "resolved": 2
+  },
+  "bids-standard__pybids-611": {
+   "failed": 7,
+   "resolved": 12
+  },
+  "deardurham__ciprs-reader-38": {
+   "failed": 31,
+   "resolved": 25
+  },
+  "dfm__emcee-295": {
+   "failed": 36,
+   "resolved": 1
+  },
+  "hhursev__recipe-scrapers-915": {
+   "failed": 16,
+   "resolved": 1
+  },
+  "kinnala__scikit-fem-634": {
+   "failed": 26,
+   "resolved": 2
+  },
+  "numpy__numpy-financial-54": {
+   "failed": 12,
+   "resolved": 1
+  },
+  "oasis-open__cti-python-stix2-342": {
+   "failed": 7,
+   "resolved": 3
+  },
+  "pyupio__changelogs-232": {
+   "failed": 1,
+   "resolved": 1
+  },
+  "snowblink14__smatch-30": {
+   "failed": 16,
+   "resolved": 1
+  },
+  "stfc__PSyclone-1111": {
+   "failed": 2,
+   "resolved": 1
+  },
+  "streamlink__streamlink-1696": {
+   "failed": 9,
+   "resolved": 19
+  },
+  "tianocore__edk2-pytool-extensions-41": {
+   "failed": 15,
+   "resolved": 1
+  },
+  "tobymao__sqlglot-2063": {
+   "failed": 4,
+   "resolved": 1
+  },
+  "Erotemic__ubelt-64": {
+   "failed": 17,
+   "resolved": 3
+  },
+  "European-XFEL__EXtra-data-257": {
+   "failed": 29,
+   "resolved": 1
+  },
+  "MicroPyramid__forex-python-27": {
+   "failed": 28,
+   "resolved": 4
+  },
+  "NCAS-CMS__cfdm-158": {
+   "failed": 9,
+   "resolved": 28
+  },
+  "RDFLib__rdflib-2160": {
+   "failed": 36,
+   "resolved": 2
+  },
+  "d3dave__cough-3": {
+   "failed": 19,
+   "resolved": 4
+  },
+  "drvinceknight__nbchkr-14": {
+   "failed": 4,
+   "resolved": 14
+  },
+  "duo-labs__parliament-185": {
+   "failed": 5,
+   "resolved": 2
+  },
+  "hylang__hy-2423": {
+   "failed": 37,
+   "resolved": 2
+  },
+  "joke2k__faker-995": {
+   "failed": 5,
+   "resolved": 2
+  },
+  "level12__morphi-6": {
+   "failed": 30,
+   "resolved": 1
+  },
+  "mkdocs__mkdocs-2916": {
+   "failed": 22,
+   "resolved": 4
+  },
+  "palantir__python-language-server-211": {
+   "failed": 11,
+   "resolved": 6
+  },
+  "pydantic__pydantic-4361": {
+   "failed": 19,
+   "resolved": 3
+  },
+  "pypa__cibuildwheel-1138": {
+   "failed": 8,
+   "resolved": 4
+  },
+  "robmarkcole__HASS-data-detective-71": {
+   "failed": 6,
+   "resolved": 4
+  },
+  "testing-cabal__systemfixtures-9": {
+   "failed": 10,
+   "resolved": 20
+  },
+  "ASFHyP3__hyp3-sdk-71": {
+   "failed": 12,
+   "resolved": 20
+  },
+  "KyleJamesWalker__yamlsettings-36": {
+   "failed": 7,
+   "resolved": 11
+  },
+  "adamchainz__apig-wsgi-290": {
+   "failed": 2,
+   "resolved": 19
+  },
+  "bids-standard__pybids-492": {
+   "failed": 35,
+   "resolved": 7
+  },
+  "dirty-cat__dirty_cat-378": {
+   "failed": 18,
+   "resolved": 3
+  },
+  "disqus__python-phabricator-64": {
+   "failed": 44,
+   "resolved": 3
+  },
+  "fnl__syntok-17": {
+   "failed": 14,
+   "resolved": 8
+  },
+  "globocom__m3u8-125": {
+   "failed": 23,
+   "resolved": 2
+  },
+  "hgrecco__pint-pandas-204": {
+   "failed": 12,
+   "resolved": 5
+  },
+  "john-kurkowski__tldextract-258": {
+   "failed": 3,
+   "resolved": 5
+  },
+  "joke2k__faker-1569": {
+   "failed": 9,
+   "resolved": 6
+  },
+  "laterpay__laterpay-client-python-85": {
+   "failed": 16,
+   "resolved": 2
+  },
+  "mkdocs__mkdocs-2852": {
+   "failed": 1,
+   "resolved": 3
+  },
+  "oasis-open__cti-python-stix2-172": {
+   "failed": 1,
+   "resolved": 2
+  },
+  "openlawlibrary__pygls-252": {
+   "failed": 23,
+   "resolved": 9
+  },
+  "python__cherry-picker-110": {
+   "failed": 11,
+   "resolved": 14
+  },
+  "PyCQA__flake8-bugbear-129": {
+   "failed": 27,
+   "resolved": 1
+  },
+  "ResearchObject__ro-crate-py-170": {
+   "failed": 10,
+   "resolved": 12
+  },
+  "asottile__dead-31": {
+   "failed": 6,
+   "resolved": 1
+  },
+  "beetbox__beets-3868": {
+   "failed": 12,
+   "resolved": 10
+  },
+  "dapr__python-sdk-272": {
+   "failed": 31,
+   "resolved": 28
+  },
+  "iris-hep__qastle-52": {
+   "failed": 1,
+   "resolved": 9
+  },
+  "iterative__dvc-8554": {
+   "failed": 6,
+   "resolved": 1
+  },
+  "nickstenning__honcho-218": {
+   "failed": 35,
+   "resolved": 4
+  },
+  "rapidpro__rapidpro-python-38": {
+   "failed": 7,
+   "resolved": 3
+  },
+  "spdx__tools-python-467": {
+   "failed": 8,
+   "resolved": 8
+  },
+  "sscpac__statick-436": {
+   "failed": 19,
+   "resolved": 4
+  },
+  "3YOURMIND__django-migration-linter-258": {
+   "failed": 30,
+   "resolved": 17
+  },
+  "asottile__yesqa-69": {
+   "failed": 30,
+   "resolved": 1
+  },
+  "iterative__dvc-4124": {
+   "failed": 20,
+   "resolved": 2
+  },
+  "jonathanj__eliottree-61": {
+   "failed": 12,
+   "resolved": 3
+  },
+  "pydantic__pydantic-868": {
+   "failed": 7,
+   "resolved": 4
+  },
+  "scrapy__scrapy-5384": {
+   "failed": 29,
+   "resolved": 3
+  },
+  "serge-sans-paille__gast-50": {
+   "failed": 46,
+   "resolved": 1
+  },
+  "tensorly__tensorly-170": {
+   "failed": 26,
+   "resolved": 1
+  },
+  "zalando-stups__senza-397": {
+   "failed": 9,
+   "resolved": 6
+  },
+  "zopefoundation__DocumentTemplate-55": {
+   "failed": 9,
+   "resolved": 7
+  },
+  "Backblaze__b2-sdk-python-433": {
+   "failed": 2,
+   "resolved": 18
+  },
+  "INM-6__python-odmltables-120": {
+   "failed": 18,
+   "resolved": 2
+  },
+  "awdeorio__mailmerge-135": {
+   "failed": 13,
+   "resolved": 12
+  },
+  "django__asgiref-211": {
+   "failed": 9,
+   "resolved": 2
+  },
+  "iterative__dvc-2304": {
+   "failed": 31,
+   "resolved": 10
+  },
+  "oasis-open__cti-python-stix2-127": {
+   "failed": 11,
+   "resolved": 4
+  },
+  "oasis-open__cti-taxii-client-55": {
+   "failed": 27,
+   "resolved": 6
+  },
+  "pydicom__pydicom-1050": {
+   "failed": 2,
+   "resolved": 1
+  },
+  "pylint-dev__astroid-1962": {
+   "failed": 10,
+   "resolved": 2
+  },
+  "recurly__recurly-client-python-372": {
+   "failed": 15,
+   "resolved": 1
+  },
+  "stravalib__stravalib-309": {
+   "failed": 10,
+   "resolved": 34
+  },
+  "akolar__ogn-lib-18": {
+   "failed": 36,
+   "resolved": 1
+  },
+  "canonical__operator-1024": {
+   "failed": 19,
+   "resolved": 1
+  },
+  "doccano__doccano-1557": {
+   "failed": 11,
+   "resolved": 1
+  },
+  "iterative__dvc-4747": {
+   "failed": 15,
+   "resolved": 2
+  },
+  "karlicoss__promnesia-277": {
+   "failed": 21,
+   "resolved": 2
+  },
+  "marcelm__cutadapt-750": {
+   "failed": 7,
+   "resolved": 5
+  },
+  "pddg__uroboros-41": {
+   "failed": 1,
+   "resolved": 2
+  },
+  "pydantic__pydantic-2286": {
+   "failed": 5,
+   "resolved": 2
+  },
+  "sdispater__pendulum-726": {
+   "failed": 16,
+   "resolved": 28
+  },
+  "tsroten__dragonmapper-24": {
+   "failed": 7,
+   "resolved": 14
+  },
+  "PyThaiNLP__pythainlp-399": {
+   "failed": 1,
+   "resolved": 2
+  },
+  "SethMMorton__natsort-143": {
+   "failed": 24,
+   "resolved": 10
+  },
+  "acorg__dark-matter-663": {
+   "failed": 32,
+   "resolved": 2
+  },
+  "adafruit__Adafruit_CircuitPython_GPS-76": {
+   "failed": 21,
+   "resolved": 1
+  },
+  "alephdata__followthemoney-871": {
+   "failed": 2,
+   "resolved": 4
+  },
+  "bugsnag__bugsnag-python-188": {
+   "failed": 21,
+   "resolved": 4
+  },
+  "cisagov__check-cve-2019-19781-10": {
+   "failed": 3,
+   "resolved": 5
+  },
+  "crccheck__project_runpy-17": {
+   "failed": 11,
+   "resolved": 2
+  },
+  "ilevkivskyi__com2ann-21": {
+   "failed": 22,
+   "resolved": 10
+  },
+  "marshmallow-code__apispec-382": {
+   "failed": 10,
+   "resolved": 4
+  },
+  "mc706__changelog-cli-34": {
+   "failed": 3,
+   "resolved": 7
+  },
+  "nithinmurali__pygsheets-272": {
+   "failed": 2,
+   "resolved": 1
+  },
+  "ofek__hatch-vcs-17": {
+   "failed": 1,
+   "resolved": 3
+  },
+  "pydantic__pydantic-4884": {
+   "failed": 24,
+   "resolved": 6
+  },
+  "reata__sqllineage-19": {
+   "failed": 19,
+   "resolved": 3
+  },
+  "tobgu__pyrsistent-281": {
+   "failed": 1,
+   "resolved": 3
+  },
+  "tobymao__sqlglot-2529": {
+   "failed": 5,
+   "resolved": 2
+  },
+  "zopefoundation__Zope-1183": {
+   "failed": 8,
+   "resolved": 4
+  },
+  "PyCQA__pyflakes-745": {
+   "failed": 8,
+   "resolved": 3
+  },
+  "Textualize__textual-441": {
+   "failed": 30,
+   "resolved": 3
+  },
+  "asottile__pyupgrade-217": {
+   "failed": 16,
+   "resolved": 10
+  },
+  "barrust__pyspellchecker-101": {
+   "failed": 23,
+   "resolved": 7
+  },
+  "celery__py-amqp-357": {
+   "failed": 6,
+   "resolved": 7
+  },
+  "cta-observatory__pyirf-193": {
+   "failed": 12,
+   "resolved": 10
+  },
+  "marcosschroh__dataclasses-avroschema-236": {
+   "failed": 33,
+   "resolved": 1
+  },
+  "oasis-open__cti-python-stix2-354": {
+   "failed": 37,
+   "resolved": 2
+  },
+  "pydicom__pydicom-1192": {
+   "failed": 14,
+   "resolved": 5
+  },
+  "pypa__wheel-250": {
+   "failed": 12,
+   "resolved": 8
+  },
+  "scitokens__scitokens-193": {
+   "failed": 11,
+   "resolved": 12
+  },
+  "sendgrid__sendgrid-python-233": {
+   "failed": 24,
+   "resolved": 1
+  },
+  "stan-dev__pystan-257": {
+   "failed": 1,
+   "resolved": 8
+  },
+  "PlasmaPy__PlasmaPy-138": {
+   "failed": 26,
+   "resolved": 6
+  },
+  "TheFriendlyCoder__friendlypins-77": {
+   "failed": 5,
+   "resolved": 5
+  },
+  "commitizen-tools__commitizen-497": {
+   "failed": 29,
+   "resolved": 1
+  },
+  "iterative__dvc-7234": {
+   "failed": 8,
+   "resolved": 5
+  },
+  "jjhelmus__nmrglue-216": {
+   "failed": 6,
+   "resolved": 5
+  },
+  "kangasta__fdbk-77": {
+   "failed": 17,
+   "resolved": 1
+  },
+  "kodemore__kink-43": {
+   "failed": 12,
+   "resolved": 3
+  },
+  "matchms__matchms-212": {
+   "failed": 11,
+   "resolved": 1
+  },
+  "microsoft__electionguard-python-189": {
+   "failed": 13,
+   "resolved": 2
+  },
+  "mixkorshun__django-antispam-6": {
+   "failed": 3,
+   "resolved": 2
+  },
+  "pydantic__pydantic-2056": {
+   "failed": 9,
+   "resolved": 4
+  },
+  "pylint-dev__astroid-1614": {
+   "failed": 5,
+   "resolved": 2
+  },
+  "scikit-hep__scikit-hep-333": {
+   "failed": 9,
+   "resolved": 13
+  },
+  "fatiando__pooch-180": {
+   "failed": 16,
+   "resolved": 5
+  },
+  "iterative__dvc-3025": {
+   "failed": 2,
+   "resolved": 3
+  },
+  "python-metar__python-metar-152": {
+   "failed": 14,
+   "resolved": 7
+  },
+  "sqlfluff__sqlfluff-880": {
+   "failed": 3,
+   "resolved": 1
+  },
+  "zulip__zulip-terminal-1350": {
+   "failed": 42,
+   "resolved": 10
+  },
+  "Azure__msrest-for-python-189": {
+   "failed": 22,
+   "resolved": 9
+  },
+  "ResearchObject__ro-crate-py-161": {
+   "failed": 31,
+   "resolved": 2
+  },
+  "click-contrib__sphinx-click-94": {
+   "failed": 1,
+   "resolved": 3
+  },
+  "construct__construct-889": {
+   "failed": 13,
+   "resolved": 15
+  },
+  "en0__dnry-config-4": {
+   "failed": 3,
+   "resolved": 8
+  },
+  "getsentry__responses-530": {
+   "failed": 16,
+   "resolved": 9
+  },
+  "oasis-open__cti-python-stix2-393": {
+   "failed": 7,
+   "resolved": 1
+  },
+  "omry__omegaconf-57": {
+   "failed": 21,
+   "resolved": 9
+  },
+  "spiral-project__ihatemoney-1193": {
+   "failed": 27,
+   "resolved": 2
+  },
+  "tobymao__sqlglot-2576": {
+   "failed": 61,
+   "resolved": 1
+  },
+  "cdent__gabbi-186": {
+   "failed": 16,
+   "resolved": 13
+  },
+  "dlce-eva__python-nexus-27": {
+   "failed": 21,
+   "resolved": 32
+  },
+  "magmax__python-inquirer-526": {
+   "failed": 2,
+   "resolved": 12
+  },
+  "marshmallow-code__webargs-541": {
+   "failed": 9,
+   "resolved": 6
+  },
+  "maxfischer2781__asyncstdlib-49": {
+   "failed": 16,
+   "resolved": 1
+  },
+  "pydantic__pydantic-2294": {
+   "failed": 14,
+   "resolved": 3
+  },
+  "pydantic__pydantic-2711": {
+   "failed": 9,
+   "resolved": 2
+  },
+  "scrapinghub__price-parser-43": {
+   "failed": 19,
+   "resolved": 4
+  },
+  "spdx__tools-python-778": {
+   "failed": 20,
+   "resolved": 3
+  },
+  "tomerfiliba__plumbum-366": {
+   "failed": 2,
+   "resolved": 7
+  },
+  "Backblaze__B2_Command_Line_Tool-420": {
+   "failed": 3,
+   "resolved": 4
+  },
+  "PSLmodels__microdf-219": {
+   "failed": 20,
+   "resolved": 2
+  },
+  "aio-libs__aioftp-113": {
+   "failed": 10,
+   "resolved": 1
+  },
+  "cuthbertLab__music21-960": {
+   "failed": 4,
+   "resolved": 6
+  },
+  "iterative__dvc-7360": {
+   "failed": 21,
+   "resolved": 11
+  },
+  "macbre__sql-metadata-388": {
+   "failed": 52,
+   "resolved": 2
+  },
+  "planetlabs__planet-client-python-768": {
+   "failed": 7,
+   "resolved": 8
+  },
+  "rigetti__pyquil-1694": {
+   "failed": 9,
+   "resolved": 19
+  },
+  "ReproNim__reproman-508": {
+   "failed": 28,
+   "resolved": 1
+  },
+  "andialbrecht__sqlparse-231": {
+   "failed": 25,
+   "resolved": 8
+  },
+  "andialbrecht__sqlparse-633": {
+   "failed": 39,
+   "resolved": 3
+  },
+  "fairlearn__fairlearn-644": {
+   "failed": 16,
+   "resolved": 16
+  },
+  "iterative__dvc-8542": {
+   "failed": 26,
+   "resolved": 1
+  },
+  "line__line-bot-sdk-python-274": {
+   "failed": 18,
+   "resolved": 7
+  },
+  "marshmallow-code__apispec-539": {
+   "failed": 3,
+   "resolved": 3
+  },
+  "mathandy__svgpathtools-170": {
+   "failed": 16,
+   "resolved": 6
+  },
+  "pydantic__pydantic-4329": {
+   "failed": 1,
+   "resolved": 3
+  },
+  "PEtab-dev__libpetab-python-235": {
+   "failed": 23,
+   "resolved": 2
+  },
+  "Sceptre__sceptre-1249": {
+   "failed": 36,
+   "resolved": 1
+  },
+  "Textualize__textual-1427": {
+   "failed": 3,
+   "resolved": 25
+  },
+  "lightstep__lightstep-tracer-python-109": {
+   "failed": 15,
+   "resolved": 2
+  },
+  "pydantic__pydantic-3847": {
+   "failed": 31,
+   "resolved": 8
+  },
+  "python-babel__flask-babel-230": {
+   "failed": 14,
+   "resolved": 4
+  },
+  "stummjr__flake8-scrapy-19": {
+   "failed": 8,
+   "resolved": 2
+  },
+  "terrencepreilly__darglint-24": {
+   "failed": 23,
+   "resolved": 1
+  },
+  "tobymao__sqlglot-2800": {
+   "failed": 31,
+   "resolved": 1
+  },
+  "ShawHahnLab__igseq-57": {
+   "failed": 16,
+   "resolved": 7
+  },
+  "adamchainz__apig-wsgi-80": {
+   "failed": 12,
+   "resolved": 1
+  },
+  "andialbrecht__sqlparse-323": {
+   "failed": 4,
+   "resolved": 5
+  },
+  "bloomberg__attrs-strict-38": {
+   "failed": 14,
+   "resolved": 7
+  },
+  "cuthbertLab__music21-958": {
+   "failed": 40,
+   "resolved": 33
+  },
+  "encode__typesystem-65": {
+   "failed": 7,
+   "resolved": 1
+  },
+  "fronzbot__blinkpy-401": {
+   "failed": 30,
+   "resolved": 7
+  },
+  "ithaka__apiron-38": {
+   "failed": 20,
+   "resolved": 16
+  },
+  "kytos__python-openflow-225": {
+   "failed": 6,
+   "resolved": 6
+  },
+  "mapbox__mapbox-sdk-py-128": {
+   "failed": 10,
+   "resolved": 4
+  },
+  "matthewwithanm__python-markdownify-114": {
+   "failed": 35,
+   "resolved": 2
+  },
+  "mhostetter__galois-219": {
+   "failed": 8,
+   "resolved": 3
+  },
+  "pydantic__pydantic-2479": {
+   "failed": 23,
+   "resolved": 20
+  },
+  "stitchfix__nodebook-8": {
+   "failed": 25,
+   "resolved": 5
+  },
+  "wright-group__WrightTools-938": {
+   "failed": 10,
+   "resolved": 7
+  },
+  "claudep__swiss-qr-bill-87": {
+   "failed": 22,
+   "resolved": 1
+  },
+  "datadriventests__ddt-98": {
+   "failed": 8,
+   "resolved": 4
+  },
+  "datalad__datalad-next-577": {
+   "failed": 5,
+   "resolved": 6
+  },
+  "drvinceknight__nbchkr-19": {
+   "failed": 16,
+   "resolved": 1
+  },
+  "graphql-python__graphene-644": {
+   "failed": 14,
+   "resolved": 10
+  },
+  "iterative__dvc-3891": {
+   "failed": 29,
+   "resolved": 4
+  },
+  "pydantic__pydantic-1755": {
+   "failed": 23,
+   "resolved": 3
+  },
+  "pydantic__pydantic-2006": {
+   "failed": 21,
+   "resolved": 10
+  },
+  "pypa__wheel-578": {
+   "failed": 17,
+   "resolved": 1
+  },
+  "reata__sqllineage-45": {
+   "failed": 12,
+   "resolved": 1
+  },
+  "scikit-hep__vector-444": {
+   "failed": 29,
+   "resolved": 7
+  },
+  "scrapinghub__price-parser-31": {
+   "failed": 16,
+   "resolved": 3
+  },
+  "zulip__zulip-terminal-1468": {
+   "failed": 14,
+   "resolved": 3
+  },
+  "Infinidat__munch-52": {
+   "failed": 13,
+   "resolved": 5
+  },
+  "ValvePython__steam-359": {
+   "failed": 11,
+   "resolved": 1
+  },
+  "VirtusLab__git-machete-330": {
+   "failed": 10,
+   "resolved": 5
+  },
+  "aio-libs__aiosmtpd-106": {
+   "failed": 1,
+   "resolved": 1
+  },
+  "canonical__charmcraft-917": {
+   "failed": 12,
+   "resolved": 1
+  },
+  "elastic__elasticsearch-py-2030": {
+   "failed": 14,
+   "resolved": 10
+  },
+  "geopandas__geopandas-2933": {
+   "failed": 2,
+   "resolved": 2
+  },
+  "iterative__dvc-3315": {
+   "failed": 23,
+   "resolved": 2
+  },
+  "omry__omegaconf-218": {
+   "failed": 12,
+   "resolved": 1
+  },
+  "pydantic__pydantic-2523": {
+   "failed": 12,
+   "resolved": 1
+  },
+  "pydantic__pydantic-4455": {
+   "failed": 14,
+   "resolved": 6
+  },
+  "pydantic__pydantic-6194": {
+   "failed": 14,
+   "resolved": 13
+  },
+  "robotpy__robotpy-cppheaderparser-44": {
+   "failed": 3,
+   "resolved": 2
+  },
+  "sciunto-org__python-bibtexparser-442": {
+   "failed": 4,
+   "resolved": 4
+  },
+  "sphinx-gallery__sphinx-gallery-480": {
+   "failed": 22,
+   "resolved": 1
+  },
+  "PMEAL__porespy-378": {
+   "failed": 16,
+   "resolved": 1
+  },
+  "PyFilesystem__pyfilesystem2-396": {
+   "failed": 2,
+   "resolved": 5
+  },
+  "Viatorus__quom-43": {
+   "failed": 12,
+   "resolved": 3
+  },
+  "adamchainz__time-machine-298": {
+   "failed": 22,
+   "resolved": 24
+  },
+  "aequitas__python-rflink-39": {
+   "failed": 2,
+   "resolved": 1
+  },
+  "iterative__dvc-5161": {
+   "failed": 25,
+   "resolved": 4
+  },
+  "marshmallow-code__flask-smorest-542": {
+   "failed": 23,
+   "resolved": 7
+  },
+  "microsoft__electionguard-python-191": {
+   "failed": 11,
+   "resolved": 5
+  },
+  "oasis-open__cti-python-stix2-407": {
+   "failed": 26,
+   "resolved": 3
+  },
+  "oasis-open__cti-taxii-client-11": {
+   "failed": 1,
+   "resolved": 3
+  },
+  "planetlabs__planet-client-python-581": {
+   "failed": 1,
+   "resolved": 10
+  },
+  "pydantic__pydantic-3543": {
+   "failed": 61,
+   "resolved": 2
+  },
+  "pydantic__pydantic-3646": {
+   "failed": 26,
+   "resolved": 10
+  },
+  "pydantic__pydantic-6586": {
+   "failed": 48,
+   "resolved": 13
+  },
+  "pypa__setuptools_scm-277": {
+   "failed": 10,
+   "resolved": 9
+  },
+  "seequent__pure_interface-54": {
+   "failed": 27,
+   "resolved": 5
+  },
+  "Knio__pynmea2-124": {
+   "failed": 2,
+   "resolved": 2
+  },
+  "PyCQA__flake8-bugbear-209": {
+   "failed": 20,
+   "resolved": 7
+  },
+  "auth0__auth0-python-354": {
+   "failed": 1,
+   "resolved": 16
+  },
+  "barrust__pyspellchecker-87": {
+   "failed": 50,
+   "resolved": 22
+  },
+  "biolink__biolinkml-369": {
+   "failed": 24,
+   "resolved": 6
+  },
+  "devopsspiral__KubeLibrary-124": {
+   "failed": 16,
+   "resolved": 1
+  },
+  "duo-labs__parliament-37": {
+   "failed": 24,
+   "resolved": 9
+  },
+  "glotzerlab__rowan-10": {
+   "failed": 9,
+   "resolved": 5
+  },
+  "iterative__dvc-6683": {
+   "failed": 8,
+   "resolved": 6
+  },
+  "microsoft__torchgeo-675": {
+   "failed": 11,
+   "resolved": 3
+  },
+  "pycasbin__sqlalchemy-adapter-34": {
+   "failed": 11,
+   "resolved": 8
+  },
+  "pylint-dev__astroid-1417": {
+   "failed": 8,
+   "resolved": 1
+  },
+  "sqlfluff__sqlfluff-2907": {
+   "failed": 43,
+   "resolved": 2
+  },
+  "Textualize__textual-2981": {
+   "failed": 5,
+   "resolved": 10
+  },
+  "asottile__add-trailing-comma-28": {
+   "failed": 19,
+   "resolved": 1
+  },
+  "astropy__pyvo-357": {
+   "failed": 7,
+   "resolved": 13
+  },
+  "cuthbertLab__music21-314": {
+   "failed": 18,
+   "resolved": 18
+  },
+  "ikalnytskyi__picobox-79": {
+   "failed": 21,
+   "resolved": 1
+  },
+  "pydantic__pydantic-4493": {
+   "failed": 26,
+   "resolved": 4
+  },
+  "pypa__hatch-422": {
+   "failed": 51,
+   "resolved": 38
+  },
+  "python-jsonschema__check-jsonschema-166": {
+   "failed": 13,
+   "resolved": 6
+  },
+  "stopthatcow__zazu-184": {
+   "failed": 24,
+   "resolved": 1
+  },
+  "tensorly__tensorly-221": {
+   "failed": 2,
+   "resolved": 2
+  },
+  "zhmcclient__python-zhmcclient-142": {
+   "failed": 15,
+   "resolved": 5
+  },
+  "Shopify__shopify_python_api-363": {
+   "failed": 10,
+   "resolved": 1
+  },
+  "Textualize__textual-2530": {
+   "failed": 9,
+   "resolved": 12
+  },
+  "coverahealth__dataspec-4": {
+   "failed": 10,
+   "resolved": 13
+  },
+  "googlefonts__picosvg-240": {
+   "failed": 10,
+   "resolved": 2
+  },
+  "kangasta__fdbk-72": {
+   "failed": 12,
+   "resolved": 9
+  },
+  "kiwicom__structlog-sentry-18": {
+   "failed": 1,
+   "resolved": 3
+  },
+  "mahmoud__boltons-298": {
+   "failed": 1,
+   "resolved": 1
+  },
+  "pimutils__khal-1145": {
+   "failed": 35,
+   "resolved": 1
+  },
+  "sloria__sphinx-issues-131": {
+   "failed": 1,
+   "resolved": 1
+  },
+  "tobymao__sqlglot-1670": {
+   "failed": 18,
+   "resolved": 15
+  },
+  "pydantic__pydantic-1804": {
+   "failed": 4,
+   "resolved": 2
+  },
+  "pyvista__pyvista-4315": {
+   "failed": 10,
+   "resolved": 2
+  },
+  "rubik__radon-212": {
+   "failed": 21,
+   "resolved": 9
+  },
+  "somm15__PyViCare-122": {
+   "failed": 19,
+   "resolved": 1
+  },
+  "godatadriven__evol-164": {
+   "failed": 5,
+   "resolved": 17
+  },
+  "googleapis__python-datastore-115": {
+   "failed": 20,
+   "resolved": 11
+  },
+  "macbre__sql-metadata-387": {
+   "failed": 31,
+   "resolved": 6
+  },
+  "markusressel__container-app-conf-8": {
+   "failed": 3,
+   "resolved": 2
+  },
+  "mbillow__python-redpocket-4": {
+   "failed": 6,
+   "resolved": 6
+  },
+  "modernatx__seqlike-76": {
+   "failed": 11,
+   "resolved": 29
+  },
+  "oasis-open__cti-python-stix2-10": {
+   "failed": 6,
+   "resolved": 3
+  },
+  "pydantic__pydantic-2064": {
+   "failed": 30,
+   "resolved": 3
+  },
+  "reata__sqllineage-107": {
+   "failed": 13,
+   "resolved": 14
+  },
+  "repobee__repobee-207": {
+   "failed": 8,
+   "resolved": 17
+  },
+  "tobymao__sqlglot-1703": {
+   "failed": 59,
+   "resolved": 1
+  },
+  "unit8co__darts-2152": {
+   "failed": 35,
+   "resolved": 1
+  },
+  "urllib3__urllib3-1692": {
+   "failed": 13,
+   "resolved": 5
+  },
+  "ARMmbed__greentea-263": {
+   "failed": 38,
+   "resolved": 2
+  },
+  "Axelrod-Python__Axelrod-638": {
+   "failed": 19,
+   "resolved": 15
+  },
+  "Open-EO__openeo-pg-parser-python-7": {
+   "failed": 4,
+   "resolved": 1
+  },
+  "PEtab-dev__libpetab-python-92": {
+   "failed": 2,
+   "resolved": 2
+  }
+ }
+}

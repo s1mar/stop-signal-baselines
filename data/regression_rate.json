@@ -1,0 +1,10 @@
+{
+ "n_analyzable": 117,
+ "n_excluded_unrangeable": 4,
+ "n_with_regression": 27,
+ "regression_rate": 0.23076923076923078,
+ "median_max_drop_among_regressors": 0.136986301369863,
+ "median_drops_among_regressors": 1.0,
+ "median_peak_minus_final": 0.0,
+ "frac_ending_below_peak": 0.1623931623931624
+}

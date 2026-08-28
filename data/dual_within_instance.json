@@ -1,0 +1,48 @@
+{
+ "_meta": {
+  "n_trajectories": 960,
+  "n_instances": 60,
+  "n_instances_both": 60,
+  "n_pairs": 3840,
+  "n_failed": 480,
+  "n_resolved": 480,
+  "bootstrap": 2000,
+  "seed": 20260724
+ },
+ "syntactic": {
+  "pooled_auc": 0.6129513888888889,
+  "within_instance_auc": 0.61484375,
+  "within_ci": [
+   0.5742122395833333,
+   0.6535286458333333
+  ],
+  "delta": 0.0018923611111111294
+ },
+ "convergence": {
+  "pooled_auc": 0.5799739583333333,
+  "within_instance_auc": 0.5875,
+  "within_ci": [
+   0.5493489583333333,
+   0.6244856770833334
+  ],
+  "delta": 0.007526041666666705
+ },
+ "prm_proxy": {
+  "pooled_auc": 0.5721310763888889,
+  "within_instance_auc": 0.5928385416666667,
+  "within_ci": [
+   0.5433528645833333,
+   0.6408854166666667
+  ],
+  "delta": 0.02070746527777778
+ },
+ "self_report": {
+  "pooled_auc": 0.5205707465277778,
+  "within_instance_auc": 0.520703125,
+  "within_ci": [
+   0.4981770833333333,
+   0.5427115885416667
+  ],
+  "delta": 0.00013237847222224985
+ }
+}

@@ -1,0 +1,919 @@
+\documentclass[sigconf,screen]{acmart}
+\pdfsuppressptexinfo=-1
+\AtBeginDocument{
+  \providecommand\BibTeX{{\normalfont B\kern-0.5em{\scshape i\kern-0.25em b}\kern-0.8em\TeX}}}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\setcopyright{cc}
+\setcctype{by}
+\acmDOI{10.1145/3843282.3844447}
+\acmYear{2026}
+\copyrightyear{2026}
+\acmISBN{979-8-4007-2985-0/2026/10}
+\acmConference[AgenticDev '26]{Proceedings of the 1st International Workshop on Agentic AI for Next-Generation Software Development}{October 12--16, 2026}{Munich, Germany}
+\acmBooktitle{Proceedings of the 1st International Workshop on Agentic AI for Next-Generation Software Development (AgenticDev '26), October 12--16, 2026, Munich, Germany}
+\acmSubmissionID{asews26agenticdevmain-p195-p}
+\received{2026-07-25}
+\received[accepted]{2026-08-20}
+
+\begin{document}
+
+\title{They Do Not Fire Late, They Barely Fire}
+\subtitle{Four Surface-Behavior Stopping Baselines for Long-Horizon Coding Agents,
+and How to Report One}
+\author{Simarjot Khanna}
+\affiliation{
+  \institution{Independent Researcher}
+  \country{Canada}
+}
+\email{simarkhanna76@gmail.com}
+
+\begin{abstract}
+Long-horizon coding agents frequently waste budget by acting without progressing. A growing family
+of stop-signals proposes to abort such runs early, but each is evaluated on its own corpus against
+its own baseline, leaving their limits unknown. We operationalize four stop-signal families from
+published designs as inexpensive fixed-threshold detectors and evaluate them by replaying public
+agent trajectories; every claim is scoped to these author-built operationalizations, not to the
+published systems themselves. A retrospective Oracle Stop, the last step at which a run moved
+closer to the benchmark's reference patch, grounds the timing and waste analyses; the headline
+results need only run outcomes and detector fire steps. Held to a strict false-abort budget of
+5\%, these detectors fail not by firing late but by remaining silent on the large majority of
+doomed runs. The diagnosis replicated on four preregistered held-out configurations, and a
+threshold calibrated on one deployment either fell silent or violated the budget on others. The
+mechanism is that doomed and recoverable runs produce largely overlapping alarm-score
+distributions, and their separability stops improving by mid-run, so waiting does not sharpen the
+signal; in a difficulty-matched sample, task difficulty does not produce the separation. From this
+we derive a falsifiable separation target for future detectors, and a three-part reporting
+protocol: coverage at a stated false-abort budget, run-level separation, and whether the operating
+threshold survives a change of deployment.
+\end{abstract}
+
+\begin{CCSXML}
+<ccs2012>
+<concept><concept_id>10011007.10011074.10011099</concept_id>
+<concept_desc>Software and its engineering~Software verification and validation</concept_desc>
+<concept_significance>500</concept_significance></concept>
+<concept><concept_id>10010147.10010178</concept_id>
+<concept_desc>Computing methodologies~Artificial intelligence</concept_desc>
+<concept_significance>300</concept_significance></concept>
+</ccs2012>
+\end{CCSXML}
+\ccsdesc[500]{Software and its engineering~Software verification and validation}
+\ccsdesc[300]{Computing methodologies~Artificial intelligence}
+
+\keywords{coding agents, early termination, stop-signals, agent liveness,
+empirical software engineering}
+
+\maketitle
+
+\section{Introduction}
+An autonomous coding agent is given a budget and a task and decides for itself when it is done.
+When the task is out of reach it frequently does something worse than fail: it keeps going,
+re-reading files it has read, re-applying edits it has tried, rerunning tests it has watched fail,
+consuming budget while producing nothing that moves it toward a solution. The run is not deadlocked;
+it simply is not converging. This is now widely reported \cite{bouzenia2025understanding,
+understandingcodeagent2025, coherencecollapse2026, resolveratehides2026}, and a parallel line of
+work proposes to cut such runs short, each reporting savings on its own corpus against its own
+baseline \cite{bagen2026, earlydiagnosis2026, agentstop2026, shp2026, eet2026}.
+
+What the field cannot currently do is say why those proposals stop where they do. A stop-signal is
+a predictor of a single latent event, \emph{the agent will not recover from here}, and predictors are
+diagnosed against ground truth. There has been none. Whether the agent was still making progress at
+step $t$ has been answerable only by an LLM judge \cite{shp2026} or a heuristic warning
+\cite{earlydiagnosis2026}, which are themselves instances of the fallible signal under study.
+
+For coding agents a retrospective progress proxy is available and free. A benchmark instance ships
+with a reference (gold) solution; at each step we measure how close the agent's accumulated edits
+have come to it and read off the last step at which they came closer than ever before. We call that
+step the \textbf{Oracle Stop} $t^{*}$. It is not a deployable stopping rule, because it uses the
+answer; it is a measuring instrument, mirroring the oracle upper bounds used to study single-model
+reasoning-token efficiency \cite{beyondaccuracy2026}, lifted to multi-step agents. Grounded on it we
+place detector families operationalized from published stop-signals on a common
+savings-versus-false-abort frontier, by pure retrospective replay of public trajectories. The
+oracle grounds the timing and waste analyses; the coverage and transfer results ahead are computed
+from outcome labels and detector fire steps alone (Section~\ref{sec:oracle}).\footnote{Artifact
+(harness, frozen specification, recorded results, verifier):
+\url{https://github.com/s1mar/stop-signal-baselines}}
+
+\paragraph{The diagnosis.} These detectors are silent more often than they are slow: at the strict operating points a
+deployment would want, they almost never fire at all. On our development corpus of 708
+long-horizon trajectories, holding false aborts on resolved runs to 5\%, the best family recovers
+0.129 of failed-run compute, fires at all on 0.18 of failed runs, and has an active alarm at $t^{*}$
+on under 0.03 of them (the last of these, unlike the first two, depends on the oracle). Relax the
+constraint entirely and the three mechanical families cover 0.99 to 1.00. What binds is neither the time budget nor the
+stagnation statistic, but the ability to tell a doomed run from a recoverable one that looks the
+same. Everything above is a claim about the four inexpensive fixed-threshold baselines we
+operationalize, and about nothing else: not about the published systems whose signal types they
+draw on, and not about stop-signals as a class.
+
+\paragraph{The evidence that it generalizes.} That diagnosis was discovered on one corpus during
+adversarial review, so we treated it as exploratory, wrote a frozen analysis
+specification with a stated decision rule, and tested it once on four held-out configurations
+spanning three model families, two scaffolds and three task sets. It replicates on 4 of 4: median
+coverage at the 5\% budget across the 16 held-out detector-configuration pairs is 0.043 against 0.16
+to 0.18 for the mechanical families on the development corpus, and 15 of the 16 pairs are lower off-corpus than the same family
+on the development corpus. A
+separate preregistered check shows that operating thresholds fitted on one configuration do not
+transfer: applied unchanged, they either fire on almost nothing or exceed the false-abort budget,
+in the worst case by nearly thirteen times.
+
+\paragraph{The mechanism, and why it is not an artifact of the operating point.} Coverage and
+latency are both consequences of thresholding one score, so a purely threshold-based argument would
+be circular. We therefore measure the underlying quantity threshold-free: the run-level alarm-score
+distributions of failed and resolved runs overlap by 0.75 to 0.92 and separate at only 0.55 to 0.62
+AUC (0.60 to 0.62 for the three mechanical families, 0.546 for self-report), and that separability
+peaks by mid-run and then stops improving. Waiting does not sharpen the signal; it only spends
+budget.
+
+\paragraph{From a negative result to a design target.} Overlap is a quantity a future detector can
+be measured against. Section~\ref{sec:target} converts it into a falsifiable requirement: covering
+half of doomed runs at a 5\% false-abort budget needs run-level separation of 0.91 to 0.95 AUC on
+the empirical score shapes, and 0.88 under the more forgiving equal-variance Gaussian
+idealization, against 0.617 measured here. That is a large improvement, well beyond what threshold tuning reaches.
+
+\paragraph{Contributions.}
+\begin{itemize}
+\item \textbf{A reporting protocol for stopping rules}, which is the transferable output of the
+study: coverage at a stated false-abort budget, run-level separation with an instance-clustered
+interval, and whether the operating threshold survives a change of deployment. Each of the three is
+shown here to be load-bearing, none needs more than logged detector scores, resolved/failed outcome
+labels and task identifiers, and none is standard practice.
+\item A diagnosis, replicated on four preregistered held-out configurations, that the
+surface-behavior stop-signals we build fail by coverage collapse rather than by latency, and that
+their thresholds do not transfer across deployments.
+\item A threshold-free mechanism for that collapse: run-level score overlap of 0.75 to 0.92 and
+separability that plateaus by mid-run, which rules out the operating point as the explanation and
+shows that waiting does not help, and a difficulty-matched corpus showing the separation is not an
+artifact of which tasks are hard.
+\item A falsifiable design target derived from the mechanism, stating the run-level separation a
+usable stop-signal of this class would need at a given false-abort budget, for score distributions
+shaped like the ones we observe.
+\item A measurement defense: the cumulative gold-patch oracle is validated against a gold-blind
+three-vendor panel and against a more ``principled'' current-state alternative that degenerates,
+and we separate the claims that depend on the oracle from those that do not.
+\end{itemize}
+
+\section{Related Work}
+\paragraph{Agent failure, stopping, and wasted computation.}
+A fast-growing body of work dissects why coding agents fail: \citet{bouzenia2025understanding} link
+failure to thought-action misalignment and repetitive action cycles,
+\citet{understandingcodeagent2025} contrast success and failure trajectories,
+\citet{coherencecollapse2026} identify agents that reach a correct fix and then degrade it, and
+\citet{resolveratehides2026} argue resolve rate hides trajectory structure. A parallel line
+proposes policies to cut such runs short: budget-aware early stopping is reported to save 28 to
+64\% of tokens on failed trajectories \cite{bagen2026}, a large fraction of tokens
+is spent after a first failure warning \cite{earlydiagnosis2026}, and others terminate on token
+log-probabilities \cite{agentstop2026}, on semantic convergence between successive drafts,
+optionally gated by a judged quality score \cite{shp2026}, or on learned experience \cite{eet2026}. The first group diagnoses the phenomenon
+whose cost we quantify; the second optimizes policies without a shared reference against which
+their limits can be characterized. We do not propose a better policy, and we do not evaluate those
+systems. We build cheap operationalizations of the same signal types and ask what limits them,
+answering with a mechanism and a target.
+
+\paragraph{Reference-grounded analysis.}
+Grounding trajectory analysis in the reference patch is not itself novel:
+\citet{coherencecollapse2026} use it and describe the paradigm as concurrent work.
+\citet{beyondaccuracy2026} define an oracle early-stop upper bound from the gold answer for
+single-model reasoning chains. We do not claim gold grounding as a contribution. We claim the
+diagnosis built on top of it, its preregistered replication, and the honest characterization of the
+oracle's error.
+
+\paragraph{Liveness.}
+An agent that acts forever without progressing violates a classical liveness property
+\cite{lamport1977proving, alpern1985defining}; recent work names this \emph{semantic livelock} and
+proposes an embedding-diversity monitor for it \cite{zombieagents2026}. Our results locate that
+line's difficulty: the monitor sees stagnation, and stagnation is not what separates a doomed run
+from a recoverable one.
+
+\section{The Instrument}
+\paragraph{Setup.} A trajectory is a sequence of agent steps $s_1,\dots,s_n$. A subset of steps are
+edit actions that write content to files. Each benchmark instance has a gold patch $G$, a unified
+diff whose added lines define a target file set $F_G$ and a target token set $T_G$ (the code
+identifiers added by $G$).
+
+\paragraph{Progress.} At edit step $t$ let $A(t)$ be the set of code identifiers the agent has
+written into the gold target files $F_G$ up to $t$. Restricting to $F_G$ discards throwaway
+scaffolding (reproduction scripts, debug files) that would otherwise dominate the signal. We define
+primary progress as token recall
+\begin{equation}
+p(t) = |A(t) \cap T_G| \,/\, |T_G| \in [0,1],
+\end{equation}
+which is robust to reformatting and to the textual variation between two correct fixes, unlike
+exact line or full-patch matching. As a secondary, semantic view we also compute
+$p_2(t)=\cos(\phi(A_t),\phi(G))$, where $\phi$ is a frozen sentence encoder
+\cite{reimers2019sentencebert} and $A_t$ and $G$ are the text the agent and the reference patch have
+added. When the two views disagree on the Oracle Stop by more than
+20\% of the trajectory length we mark the trajectory \emph{contested} and report the rate rather
+than resolving it.
+
+\paragraph{Oracle Stop.} The Oracle Stop is the last edit step that reached a new maximum progress:
+\begin{equation}
+t^{*} = \max\{\, t : p(t) > p(t') \ \forall\, t' < t \,\}.
+\end{equation}
+with $t^{*}$ pinned at the run's first edit step when no step attains positive progress (the
+zero-overlap stratum of Section~\ref{sec:oracle}). On a failed run, every step after $t^{*}$ produced no further movement
+toward the known solution and no resolution. Because $p$ is cumulative, $t^{*}$ is a \emph{last-improvement} point, not the
+onset of a decline; Section~\ref{sec:oracle} measures how often failed runs decline at all, and
+tests this instrument against a current-state alternative that can.
+
+\paragraph{Detector quantities.} A detector $d$ fires at the first step whose alarm score crosses a
+threshold $\theta$. Sweeping $\theta$ traces a curve in three quantities:
+\begin{itemize}
+\item \textbf{false-abort rate}, the fraction of \emph{resolved} trajectories the detector would
+have aborted before completion; this is the deployment risk and we hold it to a budget;
+\item \textbf{coverage}, the fraction of failed runs on which the detector fires at all;
+\item \textbf{saved fraction}, the compute recovered by aborting at the fire point, as a fraction
+of total failed compute.
+\end{itemize}
+We also report \textbf{Oracle Regret} $R_d = t_d - t^{*}$, how many steps after the Oracle Stop the
+detector fires. Note which of these use the oracle. False-abort rate, coverage and the saved
+fraction are computed from the run's outcome label and the step at which the detector fires; none
+of them reads $t^{*}$. Only the Oracle Regret, the reference level defined next, and the ``alarm
+active at $t^{*}$'' statistic do. This separation matters for the argument and we return to it in
+Section~\ref{sec:oracle}.
+
+\paragraph{The reference level.} For a failed trajectory of $n$ steps, the post-peak region is
+$n-1-t^{*}$ steps, and the corpus-level \textbf{Post-Peak Ratio} is the total post-peak compute over
+total failed compute, $\mathrm{PPR} = \sum_i (n_i - 1 - t^{*}_i) / \sum_i n_i$. PPR is the saved
+fraction of a detector that fires exactly at $t^{*}$ on every failed run and never on a resolved
+one. We use it only as a reference level on the frontier plot. It measures where a failed run's
+compute falls relative to its last measured peak and nothing more, so it is neither a waste
+magnitude nor an upper bound: a detector firing before $t^{*}$ saves strictly more. We report it, with its
+mixture structure, in Section~\ref{sec:collapse}, and we do not build any claim of this paper on
+its magnitude.
+
+\section{Study Design}
+\label{sec:design}
+\paragraph{Corpus.} We stream the public Nebius \textsc{SWE-agent-trajectories} corpus
+\cite{nebius2024trajectories} (80{,}036 runs of the SWE-agent scaffold \cite{yang2024sweagent} over
+GitHub issues, three action-generator models) and join each trajectory to its gold patch from
+\textsc{SWE-bench-extra}, the extended instance set released with that corpus
+\cite{nebius2024trajectories}, whose task format follows SWE-bench \cite{jimenez2024swebench}. We
+take a bounded, class-balanced sample, and the reduction to 708 is a
+scope-and-joinability funnel: scanning the first 24{,}000 stream rows, we keep trajectories with at
+least 15 agent steps, up to 450 failed and 300 resolved, of which 746 join to a gold patch (446
+failed, 300 resolved). Two groups are then excluded because the progress instrument cannot score
+them: 9 resolved runs whose gold patch adds no identifier tokens, and 29 failed runs in which no
+edit action could be parsed. This leaves 708 trajectories (417 failed, 291 resolved, 80 unique
+task instances; 45 instances contribute a failed run, 42 a resolved run and 7 both). The 15-step
+floor is a scope choice: it
+selects the long-horizon regime this paper is about and excludes short runs where stopping matters
+less. All claims here are scoped to that regime. No agent is run: the frontier and every mechanical
+detector are pure retrospective replay and reproduce on a laptop. Only the optional LLM-judge rows
+and the gold-blind validation panel call inference.
+
+\paragraph{Detector families.} We implement five evaluable stop-signal families behind one
+interface. These are reimplementations \emph{in spirit}, not the published systems, and one
+is an explicit stand-in, so what the study compares is detector families as we operationalize them,
+not the original artifacts. Conclusions about stop-signals should be read at that grain.
+(1)~\emph{Syntactic repetition}: recurrence of the normalized action string in a window. Repeated
+action cycles are a documented failure mode \cite{bouzenia2025understanding} and self-reflective
+agents such as Reflexion \cite{shinn2023reflexion} are designed to break out of them; the counter
+is our own minimal detector for that behavior, not a reimplementation of either.
+(2)~\emph{Embedding diversity}:
+the Convergence Monitor \cite{zombieagents2026}, mean pairwise cosine similarity of the last $w{=}5$
+action embeddings from a frozen encoder. (3)~\emph{Process-reward proxy}: the length of the current
+run of steps whose observation shows a failure signal and no pass signal, a transparent stand-in for
+a trained process reward model \cite{lightman2023verify}. (4)~\emph{Self-report}: accumulation of
+give-up and uncertainty markers in the agent's own text, in the spirit of budget-aware
+self-assessment \cite{bagen2026}. (5)~\emph{LLM-as-judge}: a small local model reads the issue and
+the last few action-observation pairs and labels the step progressing or stuck \cite{shp2026};
+because it needs per-step inference it is evaluated on a matched subset.
+(6)~\emph{Log-probability confidence} \cite{agentstop2026} cannot be evaluated by replay: token
+log-probabilities are not present in the public corpus. We report it as unavailable instead of
+substituting a proxy.
+
+\paragraph{Exploratory and confirmatory split.} The coverage-collapse diagnosis was found on the
+development corpus during adversarial review, on the same data used to shape metric definitions and
+controls. We label it \textbf{exploratory}. Before computing any held-out result we froze an
+analysis specification: the hypotheses (coverage is low at a strict budget and rises as the
+constraint relaxes; the dominant loss is coverage rather than latency), all four held-out
+configurations with no subset selection, and unchanged detectors and threshold grids. The
+specification also fixed the full list of quantities to report for every configuration, a
+budget-sensitivity analysis to rule out dependence on the 5\% point specifically, the
+threshold-transfer test, and a decision rule under which the headline would have been withdrawn or
+narrowed. Section~\ref{sec:transfer} is the
+\textbf{confirmatory} test. We report every configuration, including unfavorable rows.
+
+\paragraph{How to read the measurements.} A deployable detector must hold the false-abort rate to
+a small budget, because aborting runs that would have succeeded is the cost a deployment cannot
+pay. Under that constraint, good performance is high coverage and a high saved fraction; a
+detector can fail by firing late on the runs it covers, or by not firing at all. The run-level AUC
+and overlap coefficient read the same signal without any threshold: separation near chance means
+doomed and recoverable runs receive nearly the same scores, so no threshold can cover many doomed
+runs within the budget.
+
+\section{The Coverage Collapse}
+\label{sec:collapse}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.90\columnwidth]{figures/frontier.pdf}
+\caption{Detector families against the Oracle Stop on the development corpus. Each curve sweeps a
+detector's threshold; the dashed line is the PPR reference level. In the shaded deployable region
+every family sits near the floor. The curves cross, and with instance-clustered intervals no
+ordering among the three mechanical families is resolved.}
+\Description{Line plot of saved fraction of failed-run compute against false-abort rate on
+resolved runs, one curve per detector family. All curves stay near zero saved fraction inside the
+shaded five percent false-abort region and only rise once the false-abort rate is large.}
+\label{fig:frontier}
+\end{figure}
+
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\caption{Development corpus (417 failed, 291 resolved, 80 task instances). Saved fraction of failed
+compute at three false-abort budgets, with coverage and median Oracle Regret at the 5\% budget.
+Intervals are bootstrap 95\% CIs clustered by task instance with the operating threshold reselected
+inside each replicate; for syntactic repetition and embedding diversity the interval reaches zero,
+because on some resamples no threshold meets the budget. No detector is separated from any other, so we mark no winner.}
+\begin{tabular}{lcccccc}
+\toprule
+& \multicolumn{3}{c}{Saved at false-abort} & \multicolumn{3}{c}{At the 5\% budget} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+Family & $\le$5\% & $\le$10\% & $\le$20\% & 95\% CI & Cov. & Regret \\
+\midrule
+Syntactic repetition & 0.129 & 0.160 & 0.160 & 0.000--0.191 & 0.18 & 10.0 \\
+Embedding diversity  & 0.117 & 0.193 & 0.272 & 0.000--0.205 & 0.16 & 10.5 \\
+Process-reward proxy & 0.125 & 0.168 & 0.218 & 0.070--0.193 & 0.18 & 11.0 \\
+Self-report          & 0.049 & 0.101 & 0.101 & 0.026--0.095 & 0.07 & 12.0 \\
+\midrule
+LLM-as-judge & \multicolumn{6}{c}{\emph{matched subset only; see text}} \\
+Log-prob confidence & \multicolumn{6}{c}{\emph{unavailable in this corpus}} \\
+\bottomrule
+\end{tabular}
+\label{tab:frontier}
+\end{table}
+
+Table~\ref{tab:frontier} and Figure~\ref{fig:frontier} place the evaluable families on the
+frontier. At the 5\% false-abort budget the best of them recovers 0.129 of failed-run compute; a
+permissive 20\% budget reaches 0.272. With the bootstrap clustered by task instance and the
+threshold reselected inside each replicate, no family is separated from any other, and for
+syntactic repetition and embedding diversity the interval reaches zero, because on some
+resamples no threshold meets the budget at all.
+We report the level, which is robust, and decline to rank the detectors, which is not.
+
+\paragraph{The loss is non-firing.} The natural reading of a ten-step regret is that detectors are
+late. The compute goes elsewhere. At the 5\% operating point the best family fires
+\emph{at all} on 0.18 of failed runs, and its alarm is active at $t^{*}$ on under 0.03 of them,
+rising to about 0.20 ten steps later. A detector silent on four failed runs in five cannot recover
+much compute at this budget, and no choice of threshold that respects the budget changes that. The
+signal itself is present, though it does not recover uniformly: as the budget relaxes, the best
+coverage rises to 0.24 at 10\% and 0.33 at 20\%, and with the constraint removed entirely the three
+mechanical families cover 0.99 to 1.00 of failed runs and save 0.88 to 0.97 of their compute.
+Syntactic repetition, however, sits flat at 0.23 across the 10\% and 20\% budgets. Self-report is the exception and is genuinely blind, never
+exceeding 0.34 coverage at any budget: agents seldom announce that they are stuck.
+
+This comparison is suggestive rather than decisive on its own, because coverage and latency are two
+readings of one thresholded score, and any thresholded score can be forced to alarm everywhere.
+Section~\ref{sec:mechanism} therefore measures the underlying separation without reference to any
+threshold.
+
+\paragraph{The collapse survives a more forgiving false-abort rule.} Counting every alarm before
+completion on a resolved run as a lost resolution is the safe deployment assumption, but it is
+pessimistic: a resolved run that has already written the patch which makes the tests pass, and is
+then running tests or cleaning up, loses little if aborted. Because the operating threshold is set
+by the extreme tail of the resolved population, a few such cases could in principle move it and with
+it the whole frontier. We therefore recompute every operating point under two more forgiving
+accountings, both by replay and neither using the gold patch: \emph{lenient}, which exempts alarms
+at or after a resolved run's last applied edit, and \emph{edit window}, which starts the exemption
+three steps earlier still. All three accountings sweep the same threshold grid as
+Table~\ref{tab:frontier}, so the strict column reproduces it exactly and the comparison is
+like-for-like. Relaxing the rule does buy something, but less than it would need to. Under the
+lenient rule the process-reward proxy rises from 0.125 to 0.144 saved and embedding diversity from
+0.117 to 0.142, while syntactic repetition and self-report are unmoved. Under the deliberately
+over-generous edit window the process-reward proxy reaches 0.168 saved at 0.235 coverage and
+syntactic repetition 0.160 at 0.225. Taking the best family under each accounting, the most
+generous convention we can justify lifts saved compute from 0.129 to 0.168 and coverage from 0.18
+to 0.24. The collapse is therefore a
+property of the signal and not of the accounting convention, and the numbers in
+Table~\ref{tab:frontier} are, as we assumed, a lower bound on what these families could achieve.
+
+\paragraph{Reference level and its mixture.} For completeness we report the Post-Peak Ratio, which
+sets the dashed line in Figure~\ref{fig:frontier}. It is 0.754 over all 417 failed runs (95\% CI
+0.703 to 0.796, clustered by instance; 0.694 as a character proxy), but it is a mixture and should
+not be read as one phenomenon. Of the 417, 205 never achieve any token overlap with the reference
+patch: their Oracle Stop sits at the trajectory start, their PPR is 0.906, and they carry 0.571 of
+all failed compute, so this never-on-track stratum contributes the larger share of post-peak
+compute. The other 212 reach the patch, peak near the midpoint (median $t^{*}/n$ 0.511),
+and have a PPR of 0.552 (95\% CI 0.480 to 0.622). Only the second population is stalling after a
+near-approach.
+
+\paragraph{The collapse is not an artifact of the mixture.} Recomputing the frontier separately on
+each stratum, with the resolved set held fixed so false-abort keeps one denominator, barely moves
+detector performance: at the 5\% budget syntactic repetition saves 0.118 on reached-reference runs
+and 0.138 on the rest, and the other families differ by under 0.02 between strata. Compared within
+population, 0.118 against that stratum's own 0.552 reference level is 0.21 of its post-peak
+region, so about four fifths of that stratum's post-peak compute still goes unrecovered.
+The detectors are not merely picking off runs that were never on track, and the diagnosis does not
+depend on which population a reader treats as the legitimate target. The split itself reads the
+reference patch, so this is a robustness check on the oracle-free result and not a second one.
+
+\paragraph{The LLM judge is not resolved either way.} Because a judge needs per-step inference it is
+evaluated on a matched subset (186 failed, 123 resolved) with every family recomputed on the same
+trajectories. The two judges are open-weight coding models served locally through Ollama under an
+identical prompt: a 30B Mixture-of-Experts model with 3B active (Apache-2.0) and a 33B MoE with 3B
+active (OpenMDW-1.1).\footnote{Exact model tags, weight digests and the judge prompt are in the
+artifact.} The conservative of the two, which
+calls 18\% of steps stuck, attains the highest point estimate at the 5\% budget (0.159 saved, median
+regret 7.0 steps against 9.5 to 13 for the mechanical families); the eager one, at 32\% stuck, cannot
+satisfy the 5\% constraint at \emph{any} threshold. We claim no advantage for the judge: its
+interval, 0.104 to 0.215, overlaps the mechanical families, and a paired bootstrap of the
+conservative-minus-eager difference gives 95\% CI $[-0.058, +0.203]$, spanning zero. What is
+precisely measured is the input, not the ranking. The pattern worth a larger study is that whether a
+judge is usable at a strict operating point depends on its calibration and not
+on its being a judge. An out-of-the-box judge cannot be assumed to respect a strict-budget
+stop.
+
+\section{Preregistered Transfer Replication}
+\label{sec:transfer}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.88\textwidth]{figures/transfer.pdf}
+\caption{Confirmatory test on four held-out configurations: no detector and no threshold was fitted
+on them before preregistration (they appear in earlier work of ours only through oracle and
+run-length quantities, which involve no detector).
+Coverage of failed runs against the false-abort budget, per detector family, on a log budget axis.
+The shaded band is the deployable 5\% budget. The shape replicates 4 of 4: coverage is near the
+floor where the constraint binds, and for the mechanical families it climbs to near-total once the
+constraint is lifted. Oracle separation AUC for each configuration is in the panel title.}
+\Description{Four side-by-side line plots, one per held-out configuration, showing coverage of
+failed runs on the vertical axis against a logarithmic false-abort budget axis. In every panel the
+detector curves start near zero coverage at the five percent budget; the mechanical families climb
+towards one at the unconstrained budget while self-report often does not.}
+\label{fig:transfer}
+\end{figure*}
+
+\begin{table*}[t]
+\centering
+\small
+\caption{Every held-out configuration and every detector family, as committed in the frozen
+specification. Coverage is the fraction of failed runs on which the family fires at the stated
+false-abort budget. ``Transfer'' applies the operating threshold fitted on the development corpus
+unchanged; a false-abort rate above 0.05 means the imported threshold violates the budget in
+deployment. Rows are reported whether or not they favor the hypothesis.}
+\begin{tabular}{llccccccc}
+\toprule
+& & \multicolumn{4}{c}{Coverage at false-abort budget} & Saved & \multicolumn{2}{c}{Threshold transfer} \\
+\cmidrule(lr){3-6}\cmidrule(lr){8-9}
+Configuration & Family & 5\% & 10\% & 20\% & 100\% & @5\% & false-abort & coverage \\
+\midrule
+Claude 3.5 Sonnet, SWE-agent, Verified & Syntactic repetition & 0.049 & 0.049 & 0.049 & 1.000 & 0.008 & 0.000 & 0.012 \\
+(82 failed / 47 resolved, AUC 0.684) & Embedding diversity & 0.012 & 0.037 & 0.073 & 1.000 & 0.002 & 0.000 & 0.000 \\
+ & Process-reward proxy & 0.171 & 0.244 & 0.293 & 0.988 & 0.086 & 0.021 & 0.134 \\
+ & Self-report & 0.000 & 0.085 & 0.085 & 0.976 & 0.000 & 0.638 & 0.780 \\
+\midrule
+GPT-4o, SWE-agent, Verified & Syntactic repetition & 0.000 & 0.000 & 0.333 & 1.000 & 0.000 & 0.167 & 0.333 \\
+(78 failed / 42 resolved, AUC 0.703) & Embedding diversity & 0.000 & 0.000 & 0.321 & 1.000 & 0.000 & 0.190 & 0.321 \\
+ & Process-reward proxy & 0.000 & 0.000 & 0.000 & 1.000 & 0.000 & 0.262 & 0.333 \\
+ & Self-report & 0.051 & 0.103 & 0.218 & 0.295 & 0.020 & 0.095 & 0.103 \\
+\midrule
+Claude 4 Sonnet, SWE-agent 2025, Verified & Syntactic repetition & 0.045 & 0.205 & 0.205 & 1.000 & 0.025 & 0.086 & 0.205 \\
+(88 failed / 70 resolved, AUC 0.726) & Embedding diversity & 0.068 & 0.068 & 0.170 & 0.920 & 0.061 & 0.014 & 0.011 \\
+ & Process-reward proxy & 0.057 & 0.136 & 0.250 & 1.000 & 0.031 & 0.000 & 0.023 \\
+ & Self-report & 0.023 & 0.125 & 0.250 & 0.591 & 0.007 & 0.071 & 0.125 \\
+\midrule
+Qwen3-Coder-480B, OpenHands, SWE-rebench & Syntactic repetition & 0.041 & 0.153 & 0.153 & 1.000 & 0.033 & 0.086 & 0.153 \\
+(98 failed / 70 resolved, AUC 0.664) & Embedding diversity & 0.000 & 0.000 & 0.000 & 0.837 & 0.000 & 0.214 & 0.245 \\
+ & Process-reward proxy & 0.092 & 0.133 & 0.337 & 1.000 & 0.068 & 0.000 & 0.020 \\
+ & Self-report & 0.204 & 0.204 & 0.204 & 0.500 & 0.062 & 0.014 & 0.041 \\
+\bottomrule
+\end{tabular}
+\label{tab:transfer}
+\end{table*}
+
+The four held-out configurations were fixed in the frozen specification for diversity of model
+family, scaffold and task set: three frontier SWE-agent submissions to the public SWE-bench
+experiments leaderboard (GPT-4o and Claude 3.5 Sonnet on the classic tool interface, Claude 4 Sonnet
+on the 2025 \texttt{str\_replace\_\allowbreak editor} interface), and Qwen3-Coder-480B under the
+OpenHands scaffold \cite{wang2025openhands} on SWE-rebench. All four yielded usable data and all
+four are reported. No agent
+was run for any of them; all are replay of already published trajectories.
+
+\paragraph{The pattern replicates on all four configurations.} Across the 16 held-out
+detector-configuration pairs, all reported in Table~\ref{tab:transfer}, median coverage at the
+5\% budget is 0.043 and the maximum is 0.204,
+against 0.16 to 0.18 for the mechanical families on the development corpus; five of the sixteen
+never fire at all, which is what pulls the median down. Coverage is lower
+off-corpus than for the same family on the development corpus in 15 of the 16 pairs, the exception
+being self-report on OpenHands. We attach no test to that: the 16 pairs share four corpora and four
+detectors and are not independent, the held-out configurations have 42 to 70 resolved runs each so a
+5\% budget admits only two to four false aborts, and the corpora differ in composition as well as in
+configuration. The defensible statement is that the collapse recurs in every configuration we looked
+at, and that the held-out median and 15 of the 16 matched pairs are lower than on the corpus where it
+was found. Computing an instance-clustered interval beside each held-out coverage figure sharpens
+the collapse rather than softening it. The upper end of all 16 intervals
+stays below 0.31 and four are pinned at exactly zero, so even the most optimistic reading of every
+held-out pair leaves two thirds of doomed runs uncovered. These four corpora carry at most 1.01 runs
+per task instance, so the clustering is inert here and the interval coincides with an ordinary
+bootstrap; it does work on the development and matched corpora, at 8.9 and 16 runs per instance. What the intervals do not support is the
+finer comparison against the development corpus, where 9 of the 16 lie entirely below the
+mechanical band of 0.16 to 0.18 and 7 overlap it, so that ordering stays descriptive. Unconstrained coverage reaches at least 0.92 in 11 of the 12
+mechanical pairs (the exception, embedding diversity on OpenHands, reaches 0.837), so the detectors
+can see the behavior; what they cannot do is see it only on the runs that are doomed. The rise is
+monotone in the budget on every configuration (Figure~\ref{fig:transfer}), so the finding is not
+tied to the 5\% operating point, which the frozen specification named as a way it could have failed.
+
+\paragraph{The latency half replicates too.} Coverage alone would leave open whether the held-out
+detectors are merely late. They are not. At the 5\% budget, the fraction of failed runs whose alarm
+is active at the Oracle Stop is between 0.000 and 0.031 across the 11 pairs that fire at all, and is
+exactly zero in 7 of them. Median regret off-corpus is not worth reporting: with between 1 and 20
+fired runs per pair it ranges from $-45.5$ to $+57.5$ steps and is dominated by which handful of
+runs happened to trip the threshold, itself a symptom of the coverage collapse. We therefore do
+not read it as a measurement of latency. Both preregistered hypotheses are supported on all four
+configurations. Note that this paragraph, unlike the coverage results, depends on the oracle.
+
+\paragraph{Thresholds do not transfer.} Table~\ref{tab:transfer} also reports the preregistered
+threshold-transfer test: each family's operating threshold, fitted on the development corpus, is
+applied unchanged to each held-out configuration. Of the 16 pairs, 7 keep the false-abort rate
+within the 5\% budget, and the best of those covers 0.134 of failed runs. The other 9 exceed the
+budget: among the mechanical families by more than five times (the process-reward proxy on GPT-4o
+aborts 26.2\% of resolved runs), and in the worst case overall by nearly thirteen times (self-report
+on Claude 3.5 Sonnet aborts 63.8\%).
+Across these four case studies a threshold behaves as a property of the deployment and not of
+the detector, and on that evidence any reported operating point should be assumed invalid on a new
+model, scaffold or task distribution until recalibrated. It is a practical consequence for anyone
+shipping a stop-signal, independent of everything the oracle contributes.
+
+\paragraph{What this does not establish.} These are four case studies, not a designed experiment.
+Model, scaffold and task set vary together across rows, so nothing here attributes a magnitude to
+model capability instead of to a tool interface or a task distribution. The oracle also
+discriminates less well on the OpenHands configuration (AUC 0.664 against 0.684 to 0.726
+elsewhere), so quantities that depend on $t^{*}$ are localized less confidently there. The coverage
+and false-abort columns, which carry the replication, do not depend on $t^{*}$.
+
+\section{Mechanism: Why Coverage Collapses}
+\label{sec:mechanism}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.88\textwidth]{figures/mechanism.pdf}
+\caption{The mechanism, measured without reference to any operating point.
+(a)~Fraction of runs whose peak alarm score reaches a given level, for failed and for resolved
+runs. The threshold that holds false aborts to 5\% sits deep in a region both populations occupy,
+which is why moving it cannot buy coverage.
+(b)~Separability of failed from resolved runs, as AUC of the running score, against how far the run
+has progressed. It rises to roughly 0.62 by the first third and then stops improving, so waiting
+does not sharpen the decision.}
+\Description{Two panels. The left panel shows two survival curves, for failed and for resolved
+runs, that lie close together across the whole score range, with a dashed vertical line marking the
+threshold that holds false aborts at five percent. The right panel shows separability AUC against
+fraction of the run elapsed, rising early and then flattening between 0.60 and 0.65 for the
+mechanical detectors and near 0.55 for self-report.}
+\label{fig:mechanism}
+\end{figure*}
+
+A threshold argument alone cannot establish the diagnosis, because coverage and latency are both
+readings of one thresholded score. We therefore measure the quantity that any thresholding inherits:
+how far apart the two populations are.
+
+\paragraph{Why the run-level grain is the right one.} A detector of the class we evaluate fires on a
+run exactly when that run's score first crosses $\theta$, so it fires \emph{at all} precisely when
+the run's maximum score reaches $\theta$. Coverage and false-abort at a fixed threshold are
+therefore functions of the run-level maximum alone: the run-level analysis below is the frontier's own
+quantity with the time index marginalized out. This is
+why run-level separation governs the achievable (coverage, false-abort) pairs of any fixed-threshold
+rule on the same per-step score, and it is also why the time-resolved curve in
+Figure~\ref{fig:mechanism}b, which is the running maximum truncated at each decile, ends exactly at
+the run-level AUC in Figure~\ref{fig:mechanism}a. What the argument does not cover is a rule that
+reads the shape of the score history, not merely whether it ever crossed a level.
+
+\paragraph{The distributions overlap.} For each run take the maximum alarm score the detector ever
+reaches, giving one number per run, and compare the failed and resolved populations
+(Figure~\ref{fig:mechanism}a). The two populations are largely the same population to these
+signals: the overlap coefficient of the two distributions is 0.75 for
+embedding diversity, 0.83 for syntactic repetition, 0.85 for the process-reward proxy and 0.92 for
+self-report. Run-level separation is correspondingly weak, at 0.605 (95\% CI 0.536 to 0.669), 0.603
+(0.514 to 0.689), 0.617
+(0.526 to 0.707) and 0.546 (0.504 to 0.593) AUC respectively, with intervals bootstrapped over task
+instances. These are threshold-free statistics. They say that a doomed run and a recoverable run in
+this regime look alike to these signals, and that any fixed-threshold rule built on them inherits
+that. Setting the threshold at the resolved population's 95th percentile puts 0.16 to 0.23 of failed
+runs above it, at a realized false-abort rate of 0.052 to 0.086 (the scores are discrete, so an
+exact 5\% rate is not attainable). The frontier's slightly lower operating-point coverages in
+Table~\ref{tab:frontier} are the same signal read at thresholds that do respect the 5\% budget.
+
+\paragraph{Waiting does not help.} A natural hope is that the populations separate later, so a
+patient detector could do better. They do not (Figure~\ref{fig:mechanism}b). Computing the same
+separability at each decile of a run's length, the mechanical families climb from about 0.56 at 10\%
+elapsed to a peak of 0.62 to 0.65 between 30\% and 50\%, then flatten or drift down, ending at 0.60
+to 0.62. Self-report never exceeds 0.55. There is no late regime where the signal becomes decisive;
+by the time a patient detector would have collected more evidence, the evidence has stopped
+accumulating and the budget has been spent. This also explains the ten-step Oracle Regret without
+recourse to latency: a detector that waits is not waiting for something.
+
+\paragraph{Is the separation just task difficulty?} A pooled comparison mixes two things a deployed
+detector must not confuse: that \emph{this run} has stalled, and that \emph{this task} is hard, and
+only the first is usable since a detector does not choose its tasks. Our development corpus cannot
+separate them, having filled a failed quota and a resolved quota independently, which leaves 7 of
+its 80 instances carrying both outcomes.
+
+The public corpus does hold the matched data; the sampler never looked for it. Keeping only
+instances with runs of both outcomes yields 348 of them in the first half of the corpus, and from
+these we build a \emph{difficulty-matched} corpus: the 60 instances supporting the most
+within-instance comparisons, capped at 8 runs per outcome so no task dominates. This gives 960
+trajectories (480 failed, 480 resolved) and 3{,}840 within-instance pairs against the development
+corpus's 576. Ranking instances by the comparisons they support selects for balanced outcomes, so
+tasks the agent always fails and tasks it always solves are absent by construction and every claim
+below is bounded to tasks of intermediate difficulty. Selection was fixed before any AUC was
+computed and no agent was run.
+
+The confound does not appear (Table~\ref{tab:within}). Holding the task fixed leaves separation
+unchanged for every family, by at most $+0.021$ and by $+0.000$ for self-report, and each family's
+pooled value falls inside its
+within-instance interval. In this matched sample, task difficulty is not what produces the
+separation; the earlier 7-instance intervals contained the pooled values throughout, so they never
+evidenced a difference. Per-family pooled AUCs do differ between the two corpora (the process-reward
+proxy reads 0.617 on the development corpus and 0.572 here), and the best family is not the same one
+in both. What the design target rests on is the best value available, and that is nearly unchanged:
+0.617 for the process-reward proxy on the development corpus against 0.613 for syntactic repetition
+here, so the target's baseline does not move. This analysis is post-hoc, prompted by the confound, and not preregistered
+like Section~\ref{sec:transfer}.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Separation holds when the task is held fixed. Measured on a difficulty-matched corpus of 60
+instances that each contribute both outcomes (960 runs, 3{,}840 within-instance pairs). Intervals
+are bootstrap 95\% CIs over instances. Pooled falls inside the within-instance interval for all
+four families, so in this matched sample task difficulty is not what produces the separation.}
+\begin{tabular}{lccc}
+\toprule
+Family & Pooled & Within-instance (95\% CI) & $\Delta$ \\
+\midrule
+Syntactic repetition & 0.613 & 0.615 \,[0.574, 0.654] & $+0.002$ \\
+Embedding diversity  & 0.580 & 0.588 \,[0.549, 0.624] & $+0.008$ \\
+Process-reward proxy & 0.572 & 0.593 \,[0.543, 0.641] & $+0.021$ \\
+Self-report          & 0.521 & 0.521 \,[0.498, 0.543] & $+0.000$ \\
+\bottomrule
+\end{tabular}
+\label{tab:within}
+\end{table}
+
+\paragraph{The claim, precisely.} What the mechanism supports is that these families discriminate
+doomed from recoverable long-horizon runs at roughly 0.60 AUC, that task difficulty is not what
+produces that separation in a matched sample, and that the level is reached early. It does not establish that no signal could do better, that latency
+never matters, or that an online rule reading the shape of the score history could not improve on a
+fixed threshold. What it does establish is narrower and still useful: for fixed-threshold rules on
+these scores, waiting for a larger value of the same score does not fix low coverage, because the
+score stops becoming more discriminative long before the run ends.
+\subsection{A Falsifiable Design Target}
+\label{sec:target}
+
+The overlap statistic turns the negative result into a specification. Model the run-level alarm
+score as Gaussian with unit variance in both populations, separated by $d'$. Setting the threshold
+at the resolved population's $(1-\alpha)$ quantile holds false aborts at $\alpha$ and yields
+coverage $C = \Phi(d' - z_{1-\alpha})$, so the separation a detector needs is
+\begin{equation}
+d' = z_{1-\alpha} + z_{C}, \qquad \mathrm{AUC} = \Phi\!\left(d'/\sqrt{2}\right).
+\end{equation}
+Evaluated at $\alpha = 0.05$, covering a quarter of doomed runs requires
+0.754 AUC; half requires 0.878; three quarters requires 0.949. The best family measured here reaches
+0.617 (95\% CI 0.526 to 0.707, clustered by task instance), so closing even the gap to half coverage
+means adding roughly 0.26 AUC of run-level separation, which is a different signal rather than a
+better threshold on this one.
+
+\paragraph{How far can the Gaussian idealization be trusted?} Two checks bound it, and they pull in
+opposite directions. First, at the operating points we actually measure the model is pessimistic.
+Because the scores are discrete, the threshold at the resolved population's 95th percentile realizes
+a false-abort rate of 0.052 to 0.086 instead of exactly 0.05, and at those realized rates every
+family covers \emph{more} than the model predicts for its separation, by a factor of 1.4 to 1.7. It
+would be tempting to scale the target down by that factor; we do not, because a ratio measured at
+coverage near 0.2 licenses nothing about coverage near 0.5.
+
+Second, we redo the derivation without the Gaussian. The threshold is set by the resolved
+population, whose distribution we observe directly, so we keep that empirical shape and model an
+improved detector as one whose doomed-run scores follow the same distribution shifted up by
+$\delta$, the non-parametric counterpart of the equal-variance assumption. Sweeping $\delta$ until
+coverage reaches the target gives a requirement of 0.914 to 0.954 across the four families for half
+coverage, and 0.79 to 0.93 for a quarter. The empirical tails are heavier than a Gaussian's, so the
+threshold sits further out and \emph{more} separation is needed, not less. We therefore quote 0.914
+to 0.954 as the requirement and the Gaussian 0.878 as the more forgiving of the two derivations. The two checks disagree about the exact figure by roughly
+$0.07$ AUC in either direction and agree completely about the conclusion: every version of the
+requirement is far above the 0.617 measured here, and well outside its clustered interval of 0.526
+to 0.707.
+
+Two caveats bound this section. The target applies to detectors that fire when a per-step score
+first crosses a fixed threshold, the class evaluated here; a rule reading the shape or timing of the
+score history is outside this analysis, a route the diagnosis does not close off. And it is
+necessary, not sufficient: a signal with the required separation still has to be computable online
+and cheaply enough to be worth running. A third limitation, that AUC does not by itself determine
+coverage at a given operating point, is taken up in Section~\ref{sec:discussion}.
+
+\section{Does the Instrument Hold Up?}
+\label{sec:oracle}
+The reference quantity is a proxy, and the strongest objection to this paper is that it measures
+lexical overlap with one reference solution rather than progress toward a passing state; we treat
+that as a first-class question.
+
+\paragraph{What depends on the oracle, and what does not.} The two results that carry the paper,
+the coverage collapse and its 4-of-4 replication, use only the resolved/failed outcome label and the
+step at which the detector fires. The mechanism analysis is likewise a comparison of two
+outcome-labeled populations; the design target follows from it. The oracle enters in
+the Oracle Regret, the PPR reference level and the ``active at $t^{*}$'' statistic. It also enters
+in half the support for the comparative claim: showing a detector
+was \emph{silent} needs only outcome labels, but showing it was not merely \emph{late} needs a time
+reference for what late would mean. The separability plateau supplies that without the oracle; the
+``active at $t^{*}$'' statistic beside it does not. A reader who rejects the oracle keeps the
+collapse and the plateau and loses the sharper phrasing of the comparison. One
+qualification belongs here and not only in the threats: the corpus was filtered with the oracle's
+machinery, since a trajectory is kept only when its gold patch yields a non-empty target token set
+and at least one of its edit actions can be parsed (the 9 and 29 exclusions of
+Section~\ref{sec:design}).
+The statistics are oracle-free; the population they are measured on is not. What a reader who
+rejects the oracle entirely still faces is detectors that fire on 4\% of doomed runs off-corpus at a
+deployable budget.
+
+\paragraph{Calibration.} A valid progress oracle should give resolved runs higher maximum progress
+and a later Oracle Stop than failed runs. Resolved runs reach a median gold-token recall of 0.571
+against 0.030 for failed runs, separating the classes at 0.762 AUC, and their Oracle Stop lands at
+0.42 of the run against 0.21. The two progress views agree on $t^{*}$ for 91.0\% of trajectories;
+the 9.0\% contested cases are reported, not silently resolved. Because success is test-defined, a
+resolved run can reach its textual peak before the end and still finish by a route the token metric
+does not credit, which is why resolved $t^{*}/n$ is 0.42 and not near 1; we therefore make no
+progress claim about resolved runs.
+
+\paragraph{The zero-overlap stratum.} Nearly half of failed runs never register any token overlap
+with the reference patch, pinning $t^{*}$ at their first edit step, at or near the trajectory
+start. The premise that zero overlap
+means no progress is testable on runs known to have succeeded: 38 of 291 resolved runs, 13.1\%,
+also finish with zero overlap, having solved the task by a route the reference does not describe,
+most often by fixing the issue in files the reference patch never touches (34 of the 38).
+Zero overlap is thus strongly but not conclusively diagnostic,
+$P(\text{failed} \mid \text{zero overlap}) = 0.844$ (Wilson 95\% CI 0.793 to 0.884) against a
+corpus base rate of 0.589. This is the error bound a reader should carry into every $t^{*}$-derived
+number.
+
+\paragraph{Gold-blind readers land where the token metric does.} The sharpest test of whether
+$t^{*}$ tracks progress rather than surface overlap is whether readers who never see the reference
+patch agree with it. On 70 failed trajectories across 41 tasks, restricted to the reached-reference
+stratum where $t^{*}$ is interior and the judgment is non-trivial, we gave three frontier models
+from distinct vendors the issue and the numbered steps, gold patch withheld, and asked each for the
+last step of genuine progress. Per judge, the median absolute distance to $t^{*}$ is 2, 1 and 2
+steps; the panel median lands 1 step away (n=59 trajectories all three scored), within two steps on
+63\% of them, rank-correlated 0.65 to 0.72. This is not a positional prior: guessing the midpoint
+misses $t^{*}$ by a median of 5 steps and a uniformly random step by 6.1 to 6.6, so the readers are
+three to five times closer than position allows. Clustering by task instance, the mean per-instance
+error is 3.0 steps over 38 instances. Where the judges differ from the oracle they place progress
+\emph{earlier} in the run, so the token oracle is if anything generous to the agent. We read this as
+convergent construct validity, one step short of a second independent ground truth: it is a selected stratum,
+the models are the same technology as the agents, and no representative human annotation exists for
+the zero-overlap population.
+
+\paragraph{The ``principled'' alternative degenerates.} The cumulative signal is monotone by
+construction, so a reviewer will reasonably ask for a current-state oracle whose value can fall when
+the agent overwrites correct work. We built one: per gold target file it keeps the agent's active
+edit blocks, a new edit drops any block whose line range it replaces, and $t^{*}$ is the last step
+attaining the global maximum of line-level recall. On the 121 failed runs it can score, that
+alternative places $t^{*}$ at the last applied gold edit in 116 of them, 95.9\%. It reports when the agent last touched a gold file instead of locating a peak,
+and that is not a quantity a detector can be scored against. It also validates worse externally. On the 28 trajectories that both oracles
+score and all three judges read, the cumulative oracle's median distance to the panel is 3.0 steps
+against 5.5, and it is strictly closer on 57.1\% of them against 14.3\% the other way. It is the
+natural fix and it fails; the cumulative oracle is the better available instrument on this
+evidence.
+
+\paragraph{How often do agents actually regress?} Since the cumulative signal cannot witness an
+agent undoing correct work, we measure that separately by edit replay, letting a new edit overwrite
+any block whose line range it replaces so alignment is free to fall. One question at two strictnesses, reported as a range: regression occurs in 5.0\% of failed runs at
+line level and 23.1\% at identifier level, the latter over the 117 runs with at least two applied
+gold edits, with a median largest drop of 0.137 of the reference identifiers, and 16.2\% end below
+their own best alignment. Regression is real but a minority: the dominant failure mode is
+saturation, an agent that stops improving, not one that reaches a fix and then destroys it, which is
+why we read $t^{*}$ as a last-improvement point. Line ranges shift as edits are applied, so the
+overwrite model is approximate; we use it to gauge how common regression is, not to define $t^{*}$.
+
+\section{Discussion}
+\label{sec:discussion}
+\paragraph{What a stop-signal designer should take from this.} The three reporting numbers below are
+also three design instructions: report coverage, recalibrate per deployment, and aim at separation
+instead of at sensitivity. Only the last carries a target, and for score shapes like those measured
+here it is 0.91 to 0.95 run-level AUC to cover half of doomed runs at a 5\% budget. A proposal
+that leaves that quantity where it is has to reshape the low false-abort end of the curve to move
+the frontier; firing earlier will not do it.
+
+\paragraph{Where the remaining signal might be.} What these families measure, repetition and its
+relatives, is common to stuck runs and to hard-but-recoverable ones, so what distinguishes them is
+likely to be about the task instead of the surface behavior. Task-grounded signals include how
+much of the issue's requirement remains unaddressed, whether the failing test output has changed
+in kind, and whether the agent's plan has been revised or merely repeated. Our process-reward stand-in is the crudest version of this and
+is already the best or joint-best family at the strict budget, which is weak evidence in that
+direction. A trained process reward model \cite{lightman2023verify}, an online changepoint detector
+on a task-grounded statistic \cite{adams2007bayesian}, or a judge calibrated to a strict operating
+point instead of to accuracy, are the candidates. Testing them needs a fresh confirmatory set: the
+four configurations here are spent.
+
+\paragraph{The obvious next experiment, and why it is not here.} All four systems we draw on release
+public implementations, so the way to close the gap is to run theirs; the omission is a choice. One
+cannot be run on this evidence at all, since log-probability confidence \cite{agentstop2026} reads
+token-level log-probabilities that public corpora do not record, and a second needs live execution.
+Of the two that are replay-native, the closest fit halts on embedding convergence over successive
+drafts in a question-answering loop; carrying that onto agent trajectories means choosing
+what counts as a draft and what a plateau means across heterogeneous tool output. Those choices
+yield an adaptation, and reporting one under the original's name is the conflation this paper
+objects to elsewhere.
+
+\paragraph{The reporting protocol, stated once.} The durable output of this study is the three
+numbers a stopping rule should be reported in, each shown load-bearing above and none of them
+standard practice today. \textbf{Coverage at a stated false-abort budget}, because savings can look
+reasonable while a detector is silent on most doomed runs, and it is the number that made the
+collapse visible. \textbf{Run-level separation with an instance-clustered interval}, because it
+is what limits coverage on these score shapes and makes results comparable across
+corpora of differing difficulty. And \textbf{whether the operating threshold survives a change of
+deployment}, because a threshold fitted on one model and scaffold violated the budget on 9 of our 16
+held-out pairs, once by nearly thirteen times. None reads the reference patch: the inputs are the
+detector's own scores, the resolved/failed labels a test suite already produces, and task
+identifiers, plus a second deployment for threshold survival.
+
+\paragraph{What this study does not settle.} The design target is deployment-specific. AUC summarizes an entire ROC curve and does not
+determine coverage at a particular low false-abort operating point, which is why the empirical band
+sits 0.04 to 0.08 above the Gaussian value. It says what
+separation these score shapes require, not what any detector must reach; the protocol therefore asks
+for coverage at a stated budget \emph{directly}, with separation beside it, not a substitute.
+
+\section{Threats to Validity}
+\emph{The instrument is a proxy.} Distance to the gold patch is not progress toward a passing state,
+and the two diverge when a correct fix differs textually from the reference. We restrict the signal
+to gold target files and to token recall to reduce this, validate rather than assume (0.762 AUC),
+bound the zero-overlap stratum explicitly, publish the contested rate, and show that the natural
+current-state alternative degenerates. The residual error is real and bounds the precision of every
+$t^{*}$-derived number; it does not touch the coverage, false-abort or run-level separation
+results, which use only outcome labels.
+
+\emph{The detectors are operationalizations, not the published systems.} Five families are
+reimplemented in spirit, one of them (the process-reward proxy) an explicit stand-in for a trained
+model. Conclusions are about these operationalizations as a class of cheap surface-behavior signals,
+not about any authors' artifact. A published system with a stronger implementation of the same
+family would move the level; it would have to move run-level separation to move the diagnosis. The gap is
+closable and we did not close it; Section~\ref{sec:discussion} says which of the four cited
+systems could be run against this harness and why we did not.
+
+\emph{No detector ranking is claimed.} With instance-clustered intervals and the threshold
+reselected inside each replicate, the three mechanical families are not separated from each other,
+and marginal interval overlap is not a pairwise test in either direction. We report the level and
+the mechanism, both of which are stable, and no ordering.
+
+\emph{Scope.} Every claim is scoped to long-horizon runs of at least 15 steps, to Python
+issue-resolution benchmarks derived from SWE-bench, to the SWE-agent and OpenHands scaffolds, and to
+detectors firing when a per-step score first crosses a fixed threshold. Short runs, other languages,
+human-in-the-loop settings, and rules reading the shape of a score history instead of its maximum
+are untested here.
+
+\emph{Confounded configurations.} The four held-out configurations vary model, scaffold and task set
+together, so they establish recurrence, not a capability law. A controlled
+replication varying only the model is the priority next step; the harness already ingests both
+trajectory formats, so this is data collection, not a method change.
+
+\emph{Truncated runs are not filtered, on either side.} Run-length caps differ across scaffolds and
+neither frontier removes runs that hit one, so the comparison is like-for-like rather than
+controlled.
+
+\emph{Cost is measured in steps.} The corpus does not expose per-step token counts; we report a
+character proxy alongside steps and they agree to within six points.
+
+\emph{The false-abort counterfactual.} We count any alarm before completion on a resolved run as a
+lost resolution, overcounting runs that had already produced the passing patch.
+Section~\ref{sec:collapse} bounds the effect on the development corpus: exempting alarms after a
+resolved run's last applied edit raises the best saved fraction from 0.129 to 0.144, and an
+over-generous three-step window raises the best coverage only from 0.18 to 0.24. We did not repeat
+this off-corpus, where the resolved sets are smaller (42 to 70 runs) and one reclassified run moves
+the budget more, so the transfer results carry the strict convention only.
+
+\emph{The corpus is conditioned on the instrument.} Trajectories are kept only when the gold patch
+yields a non-empty target token set and the run contains at least one parseable edit action, so
+although coverage and false-abort do not use $t^{*}$, the
+population they are measured on was selected with the oracle's machinery. We do not expect this to
+bias the resolved-versus-failed comparison, but it is not a fully oracle-free study.
+
+\emph{The gold-blind panel uses paid API models}, unlike the rest of the study, which is free
+retrospective replay. It is a one-time validation on 70 trajectories, not part of the main
+pipeline; its prompts and raw outputs are in the released artifact.
+
+\emph{Use of AI.} Generative AI tools were used to refine the text; all conceptualization, data
+analysis and scientific verification were performed by the authors.
+
+\emph{Data availability.} The harness, frozen specification, cached scores, raw panel outputs
+and a verifier that re-derives the paper's numbers are released under an open license at
+\url{https://github.com/s1mar/stop-signal-baselines}.
+
+\section{Conclusion}
+Stopping rules for long-horizon coding agents are usually described as firing too late. Measured
+against a reference-grounded Oracle Stop under a deployable false-abort budget, the four
+inexpensive fixed-threshold baselines studied here mostly do not fire at all. The best of them
+covers 0.18 of doomed runs on its development corpus, far less on four preregistered held-out
+configurations, and its threshold does not survive the move between deployments. Neither the
+operating point nor impatience explains this: doomed and recoverable runs score alike at run
+level, separability peaks in the first half of a run and never improves, and the separation
+survives holding the task fixed in a difficulty-matched sample. This gives the next stopping rule
+a number to beat: run-level separation of 0.91 to 0.95 AUC to cover
+half of doomed runs at the same budget, for score shapes like those measured here. We would rather
+the field take the three reporting numbers than any conclusion of ours about the four baselines we
+built: report those, and the collapse is visible in anyone's data. The open problem is not
+detecting stagnation. It is telling
+stagnation on a doomed run apart from the same behavior on a run that still recovers.
+\label{endofcontent}
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{references}
+
+\end{document}

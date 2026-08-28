@@ -1,0 +1,12 @@
+{
+ "n_failed_scored": 121,
+ "n_tstar_at_last_edit": 116,
+ "degeneracy_frac": 0.9586776859504132,
+ "panel_n": 28,
+ "v2_median_abs": 3.0,
+ "v3_median_abs": 5.5,
+ "v2_within2": 0.4642857142857143,
+ "v3_within2": 0.32142857142857145,
+ "v2_closer_frac": 0.5714285714285714,
+ "v3_closer_frac": 0.14285714285714285
+}

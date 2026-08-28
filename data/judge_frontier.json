@@ -1,0 +1,22 @@
+{
+ "n_failed": 15,
+ "n_resolved": 12,
+ "savings_at_risk": {
+  "5": 0.1076555023923445,
+  "10": 0.1076555023923445,
+  "20": 0.33253588516746413
+ },
+ "regret_at_risk": {
+  "detector": "llm_judge",
+  "operating": {
+   "threshold": 4,
+   "false_abort": 0.0,
+   "saved_frac": 0.1076555023923445,
+   "median_regret": -13.0,
+   "fire_rate": 0.13333333333333333
+  },
+  "median_regret": -13.0,
+  "mean_regret": -13.0,
+  "n_fired": 2
+ }
+}

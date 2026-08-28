@@ -1,0 +1,46 @@
+{
+ "models": {
+  "gpt-4o": {
+   "display": "GPT-4o",
+   "rwr_all": 0.7860608020698577,
+   "n_failed": 147,
+   "rwr_nontrunc": 0.601010101010101,
+   "n_nontrunc": 63,
+   "pct_truncated": 0.5714285714285714,
+   "oracle_auc": 0.7364591406182727
+  },
+  "claude-3.5-sonnet": {
+   "display": "Claude 3.5 Sonnet",
+   "rwr_all": 0.7289719626168224,
+   "n_failed": 147,
+   "rwr_nontrunc": 0.694014598540146,
+   "n_nontrunc": 114,
+   "pct_truncated": 0.22448979591836735,
+   "oracle_auc": 0.6984844570739688
+  },
+  "claude-4-sonnet": {
+   "display": "Claude 4 Sonnet",
+   "rwr_all": 0.5494205862304021,
+   "n_failed": 88,
+   "rwr_nontrunc": 0.5962854349951124,
+   "n_nontrunc": 81,
+   "pct_truncated": 0.07954545454545454,
+   "oracle_auc": 0.7262073863636364
+  }
+ },
+ "intersection_n": 18,
+ "intersection": {
+  "gpt-4o": {
+   "rwr": 0.8527508090614887,
+   "n": 18
+  },
+  "claude-3.5-sonnet": {
+   "rwr": 0.8128491620111732,
+   "n": 18
+  },
+  "claude-4-sonnet": {
+   "rwr": 0.46302521008403363,
+   "n": 18
+  }
+ }
+}

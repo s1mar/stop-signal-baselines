@@ -1,0 +1,91 @@
+{
+ "syntactic": {
+  "auc": 0.603204034710376,
+  "ci": [
+   0.5143552145984038,
+   0.6893444059867689
+  ],
+  "within_instance_auc": 0.546875,
+  "within_instance_ci": [
+   0.33805517941773866,
+   0.6378685999660871
+  ],
+  "n_pairs": 576,
+  "n_instances_both_classes": 7,
+  "threshold": 5.0,
+  "realized_false_abort": 0.07216494845360824,
+  "observed_coverage": 0.22541966426858512,
+  "model_implied_coverage": 0.137894610896599,
+  "d_prime": 0.3700278073694554
+ },
+ "convergence": {
+  "auc": 0.604563771663082,
+  "ci": [
+   0.5359681897882556,
+   0.6689191637570735
+  ],
+  "within_instance_auc": 0.5798611111111112,
+  "within_instance_ci": [
+   0.5032258064516129,
+   0.7244076780259926
+  ],
+  "n_pairs": 576,
+  "n_instances_both_classes": 7,
+  "threshold": 0.9661593616008759,
+  "realized_false_abort": 0.05154639175257732,
+  "observed_coverage": 0.16546762589928057,
+  "model_implied_coverage": 0.10473518430564027,
+  "d_prime": 0.3750181132630419
+ },
+ "prm_proxy": {
+  "auc": 0.6173823827535909,
+  "ci": [
+   0.5257888763299299,
+   0.7068066356084983
+  ],
+  "within_instance_auc": 0.4505208333333333,
+  "within_instance_ci": [
+   0.34060402684563756,
+   0.6775510204081633
+  ],
+  "n_pairs": 576,
+  "n_instances_both_classes": 7,
+  "threshold": 11.0,
+  "realized_false_abort": 0.054982817869415807,
+  "observed_coverage": 0.19904076738609114,
+  "model_implied_coverage": 0.11978847577093005,
+  "d_prime": 0.42230275971534126
+ },
+ "self_report": {
+  "auc": 0.5457242453459913,
+  "ci": [
+   0.5038655788747477,
+   0.5931758385306187
+  ],
+  "within_instance_auc": 0.5590277777777778,
+  "within_instance_ci": [
+   0.4657534246575342,
+   0.6847545219638242
+  ],
+  "n_pairs": 576,
+  "n_instances_both_classes": 7,
+  "threshold": 2.0,
+  "realized_false_abort": 0.0859106529209622,
+  "observed_coverage": 0.15827338129496402,
+  "model_implied_coverage": 0.11430827697554635,
+  "d_prime": 0.1624447435944246
+ },
+ "_meta": {
+  "n_runs": 708,
+  "n_failed": 417,
+  "n_resolved": 291,
+  "n_instances": 80,
+  "n_instances_failed": 45,
+  "n_instances_resolved": 42,
+  "n_instances_both": 7,
+  "bootstrap": 2000,
+  "seed": 20260724,
+  "best_detector": "prm_proxy",
+  "model_cov_at_exactly_5pct": 0.11074969009846197
+ }
+}
